@@ -17,7 +17,7 @@ def query_device(did, variable):
 
 
 def insert_data(new_data):
-    # TODO: Implement
+    # TODO: Implement me
     client = InfluxDBClient(host=influx_host, port=influx_port)
     client.switch_database(influx_db_name)
     client.write_points(new_data)
