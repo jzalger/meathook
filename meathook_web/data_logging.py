@@ -2,7 +2,7 @@ import time
 import requests
 from string import Template
 from influxdb import InfluxDBClient
-from secrets import device_id, particle_token, influx_db_name, influx_host, influx_port
+from secrets import device_id, particle_token, influx_db_name, influx_host, influx_port, influx_user, influx_password
 
 api_get_url = Template("https://api.particle.io/v1/devices/$device_id/$var_name")
 api_vitals_url = Template("https://api.particle.io/v1/diagnostics/$device_id/last")
@@ -17,10 +17,9 @@ def query_device(did, variable):
 
 
 def insert_data(new_data):
-    # TODO: Implement me
-    client = InfluxDBClient(host=influx_host, port=influx_port)
-    client.switch_database(influx_db_name)
-    client.write_points(new_data)
+    point = {"measurement":new_data[], "fields":{"value":new_data[]}, "tags":{}}
+    client = InfluxDBClient(influx_host, influx_port, influx_user, influx_password, influx_db_name)
+    client.write_points(point)
 
 
 def main():
