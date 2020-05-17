@@ -5,13 +5,9 @@ from influxdb import InfluxDBClient
 from secrets import device_id, particle_token, influx_db_name, influx_host, influx_port
 
 api_get_url = Template("https://api.particle.io/v1/devices/$device_id/$var_name")
-api_vitals_url = Template("https://api.particle.io/v1/diagnostics/%s")
+api_vitals_url = Template("https://api.particle.io/v1/diagnostics/$device_id/last")
 
 poll_frequency = 60  # Frequency in seconds
-
-# Variable request: GET https://api.particle.io/v1/devices/:deviceId/:varName?access_token=1234
-# Function Call:  https://api.particle.io/v1/devices/:deviceID/:funcName?arg=STRING:access_token=1234
-# Device vitals: GET https://api.particle.io/v1/diagnostics/:deviceId/last?access_token=
 
 
 def query_device(did, variable):
@@ -32,6 +28,11 @@ def main():
     # while True:
     for variable in variables:
         data = query_device(device_id, variable)
-        insert_data(data)
+        print(data)
+        # insert_data(data)
         time.sleep(1)  # Rate limit the API queries
     time.sleep(poll_frequency)
+
+
+if __name__ == "__main__":
+    main()
