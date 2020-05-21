@@ -21,8 +21,11 @@ def query_device(did, variable):
 
 def insert_data(new_data):
     point = [{"measurement": new_data["name"], "fields": {"value": new_data["result"]}}]
-    client = InfluxDBClient(influx_host, influx_port, influx_user, influx_password, influx_db_name)
-    client.write_points(point)
+    try:
+        client = InfluxDBClient(influx_host, influx_port, influx_user, influx_password, influx_db_name)
+        client.write_points(point)
+    except:
+        pass
 
 
 def main():
