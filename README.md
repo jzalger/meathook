@@ -1,4 +1,4 @@
-# meathook
+# Meat Hook
 Coming Soon
 
 ## Circuit and PCB Design
