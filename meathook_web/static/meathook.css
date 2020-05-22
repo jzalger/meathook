@@ -1,3 +1,9 @@
+body {
+    background: aliceblue !important;
+}
+.main-row {
+    padding-top:10px;
+}
 .control-sub-row {
     padding-top:6px;
 }
