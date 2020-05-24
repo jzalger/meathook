@@ -88,10 +88,10 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-success btn-sm active">
-                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> ON
+                                        <input type="radio" name="auto-temp" autocomplete="off" checked> ON
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="options" id="option2" autocomplete="off"> OFF
+                                        <input type="radio" name="auto-temp" autocomplete="off"> OFF
                                     </label>
                                 </div>
                             </div>
@@ -103,10 +103,10 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-success btn-sm active">
-                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> ON
+                                        <input type="radio" name="auto-rh" autocomplete="off" checked> ON
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="options" id="option2" autocomplete="off"> OFF
+                                        <input type="radio" name="auto-rh" autocomplete="off"> OFF
                                     </label>
                                 </div>
                             </div>
@@ -120,10 +120,10 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-success btn-sm active">
-                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> ON
+                                        <input type="radio" name="fan-state" autocomplete="off" checked> ON
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="options" id="option2" autocomplete="off"> OFF
+                                        <input type="radio" name="fan-state" autocomplete="off"> OFF
                                     </label>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
                                     <input placeholder="{{ state.temp_setpoint }}" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
-                                        <button class="btn btn-outline-primary btn-sm" type="button">Set</button>
+                                        <button class="btn btn-outline-primary btn-sm" id="temp-setpoint" type="button">Set</button>
                                     </div>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@
                                     <input placeholder="{{ state.rh_setpoint }}" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
-                                        <button class="btn btn-outline-primary btn-sm" type="button">Set</button>
+                                        <button class="btn btn-outline-primary btn-sm" id="rh-setpoint" type="button">Set</button>
                                     </div>
                                 </div>
                             </div>
@@ -181,13 +181,13 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-secondary btn-sm active">
-                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Basic
+                                        <input type="radio" name="ctl-alg" autocomplete="off" checked> Basic
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="options" id="option2" autocomplete="off"> PID
+                                        <input type="radio" name="ctl-alg" autocomplete="off"> PID
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="options" id="option2" autocomplete="off"> Learning
+                                        <input type="radio" name="ctl-alg" autocomplete="off"> Learning
                                     </label>
                                 </div>
                             </div>
@@ -201,10 +201,10 @@
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-success btn-sm active">
-                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> ON
+                                        <input type="radio" name="fridge-state" autocomplete="off" checked> ON
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="options" id="option2" autocomplete="off"> OFF
+                                        <input type="radio" name="fridge-state" autocomplete="off"> OFF
                                     </label>
                                 </div>
                             </div>
@@ -220,7 +220,7 @@
                                     <input placeholder="{{ state.temp_alarm_delta }}" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
-                                        <button class="btn btn-outline-primary btn-sm" type="button">Set</button>
+                                        <button class="btn btn-outline-primary btn-sm" id="temp-alarm-set" type="button">Set</button>
                                     </div>
                                 </div>
                             </div>
@@ -236,7 +236,7 @@
                                     <input placeholder="{{ state.rh_alarm_delta }}" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
-                                        <button class="btn btn-outline-primary btn-sm" type="button">Set</button>
+                                        <button class="btn btn-outline-primary btn-sm" id="rh-alarm-set" type="button">Set</button>
                                     </div>
                                 </div>
                             </div>
@@ -259,6 +259,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="{{ url_for('static', filename='meathook.js') }}"></script>
 </body>
 </html>
