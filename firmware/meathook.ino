@@ -20,7 +20,7 @@ double fridge_temp = 0.0;
 double fridge_rh = 0.0;
 
 // Parameters for PID control
-double temp_setpoint = 6.5;
+double temp_setpoint = 7.0;
 double rh_setpoint = 40.0;
 double temp_pid_output = 0.0;
 double rh_pid_output = 0.0;
@@ -46,12 +46,8 @@ bool stream_data = TRUE;
 bool door_state = FALSE;  // False = CLOSED
 bool logging_mode = TRUE;
 
-char ext_tmp_str[6] = {"01"};
-char fridge_tmp_str[6] = {"01"};
-char fridge_rh_str[6] = {"01"};
-char fridge_state_str[4] = {"   "};
-char humidifier_state_str[4] = {"   "};
-char fan_state_str[4] = {"   "};
+String main_state = "fridge_temp, fridge_rh, external_temp, fridge_state, humidifier_state, fan_state";
+String aux_state = "temp_setpoint, rh_setpoint, temp_alarm, rh_alarm, control_alg, temp_alarm_threash, rh_alarm_threash";
 
 int stream_interval = 1; // Stream update interval in minutes
 unsigned long last_stream_update;
@@ -110,7 +106,7 @@ void setup() {
 }
 
 void loop() {
-    delay(1000); // Don't overdrive the system
+    delay(1000); // Dont overdrive the system
 
     // Turn on lights if door opens
     manage_light();
@@ -143,6 +139,8 @@ void loop() {
             }
         }
     }
+
+    /*
     if (rh_control == TRUE) {
         if (control_algorithm == "pid"){
             rh_pid.Compute();
@@ -157,6 +155,7 @@ void loop() {
             }
         }
     }
+    */
 
     if (fan_state == TRUE) {
         start_fan();
@@ -169,29 +168,26 @@ void loop() {
         fridge_temp < temp_setpoint - temp_alarm_delta) {
             trigger_temp_alarm();
         }
-    if (fridge_rh > rh_setpoint + rh_alarm_delta ||
-        fridge_rh < rh_setpoint - rh_alarm_delta) {
-            trigger_rh_alarm();
-        }
+    // if (fridge_rh > rh_setpoint + rh_alarm_delta ||
+    //     fridge_rh < rh_setpoint - rh_alarm_delta) {
+    //         trigger_rh_alarm();
+    //     }
 
     // Post readings to the cloud server
     if (stream_data == TRUE) {
         if ((millis() - last_stream_update) / 1000 > (stream_interval * 60)) {
-            sprintf(ext_tmp_str, "%.02f", external_temp);
-            sprintf(fridge_tmp_str, "%.02f", fridge_temp);
-            sprintf(fridge_rh_str, "%.02f", fridge_rh);
-            if (fridge_state) {sprintf(fridge_state_str, "ON");} else {sprintf(fridge_state_str, "OFF");}
-            if (humidifier_state) {sprintf(humidifier_state_str, "ON");} else {sprintf(humidifier_state_str, "OFF");}
-            if (fan_state) {sprintf(fan_state_str, "ON");} else {sprintf(fan_state_str, "OFF");}
-            Particle.publish("external_temp", ext_tmp_str);
-            Particle.publish("fridge_temp", fridge_tmp_str);
-            Particle.publish("fridge_rh", fridge_rh_str);
-            Particle.publish("fan_state", fan_state_str);
-            Particle.publish("fridge_state", fridge_state_str);
-            Particle.publish("humidifier_state", humidifier_state_str);
+            main_state = String(fridge_temp) + "," + String(fridge_rh) + "," + String(external_temp) + "," +
+                String(fridge_state) + "," + String(humidifier_state) + "," + String(fan_state);
+
+            aux_state = String(temp_setpoint) + "," +  String(rh_setpoint) + "," +  String(temp_alarm) + "," +
+                String(rh_alarm) + "," + control_algorithm + "," + String(temp_alarm_delta) + "," + String(rh_alarm_delta);
+
+            Particle.publish("main_state", main_state);
+            Particle.publish("aux_state", aux_state);
             last_stream_update = millis();
         }
     }
+    // Particle.sleep(SLEEP_MODE_DEEP, 900);
 }
 
 void start_fridge(){

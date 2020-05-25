@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='meathook.css') }}">
 
     <script src="https://kit.fontawesome.com/04d344c588.js" crossorigin="anonymous"></script>
+    <meta http-equiv="refresh" content="60"/>
     <title>Meat Hook</title>
 </head>
 
@@ -44,7 +45,7 @@
                     <li class="list-group-item">
                         <i class="fas fa-thermometer-half"></i> Fridge Temperature
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 25%" aria-valuenow="8"
+                            <div id="fridge-temp" class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 25%" aria-valuenow="8"
                                  aria-valuemin="0" aria-valuemax="20"> ˚C
                             </div>
                         </div>
@@ -52,7 +53,7 @@
                     <li class="list-group-item">
                         <i class="fas fa-tint"></i> Fridge Humidity
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 48%"
+                            <div id="fridge-rh" class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 48%"
                                  aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"> %
                             </div>
                         </div>
@@ -60,7 +61,7 @@
                     <li class="list-group-item">
                         <i class="fas fa-thermometer-half"></i> External Temperature
                         <div class="progress">
-                            <div id="current-ext-temp" class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%"
+                            <div id="external-temp" class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%"
                                  aria-valuenow="30"
                                  aria-valuemin="0" aria-valuemax="40"> ˚C
                             </div>
@@ -84,11 +85,11 @@
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-success btn-sm active">
-                                        <input type="radio" name="auto-temp" autocomplete="off" checked> ON
+                                    <label id="temp-ctl-on" class="btn btn-outline-success btn-sm ">
+                                        <input type="radio" name="auto-temp" autocomplete="off">ON
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="auto-temp" autocomplete="off"> OFF
+                                    <label id="temp-ctl-off" class="btn btn-outline-secondary btn-sm">
+                                        <input type="radio" name="auto-temp" autocomplete="off">OFF
                                     </label>
                                 </div>
                             </div>
@@ -99,11 +100,11 @@
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-success btn-sm active">
-                                        <input type="radio" name="auto-rh" autocomplete="off" checked> ON
+                                    <label id="rh-ctl-on" class="btn btn-outline-success btn-sm ">
+                                        <input  type="radio" name="auto-rh" autocomplete="off" >ON
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="auto-rh" autocomplete="off"> OFF
+                                    <label id="rh-ctl-off" class="btn btn-outline-secondary btn-sm">
+                                        <input type="radio" name="auto-rh" autocomplete="off">OFF
                                     </label>
                                 </div>
                             </div>
@@ -116,13 +117,11 @@
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-success btn-sm active">
-                                        <input type="radio" name="fan-state" autocomplete="off" checked> ON
-                                        <input type="radio" name="fan-state" autocomplete="off" > ON
+                                    <label id="fan-ctl-on" class="btn btn-outline-success btn-sm">
+                                        <input  type="radio" name="fan-state" autocomplete="off" >ON
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="fan-state" autocomplete="off" checked> OFF
-                                        <input type="radio" name="fan-state" autocomplete="off" > OFF
+                                    <label id="fan-ctl-off" class="btn btn-outline-secondary btn-sm">
+                                        <input type="radio" name="fan-state" autocomplete="off">OFF
                                     </label>
                                 </div>
                             </div>
@@ -151,7 +150,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
+                                    <input id="rh-setpoint-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
                                         <button class="btn btn-outline-primary btn-sm" id="rh-setpoint" type="button">Set</button>
@@ -179,13 +178,13 @@
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-secondary btn-sm active">
-                                        <input type="radio" name="ctl-alg" autocomplete="off" checked> Basic
+                                    <label id="control-alg-basic" class="btn btn-outline-secondary btn-sm">
+                                        <input type="radio" name="ctl-alg" autocomplete="off" > Basic
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm">
+                                    <label id="control-alg-pid" class="btn btn-outline-secondary btn-sm">
                                         <input type="radio" name="ctl-alg" autocomplete="off"> PID
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm">
+                                    <label id="control-alg-learn" class="btn btn-outline-secondary btn-sm">
                                         <input type="radio" name="ctl-alg" autocomplete="off"> Learning
                                     </label>
                                 </div>
@@ -199,13 +198,11 @@
                             </div>
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-success btn-sm active">
-                                        <input type="radio" name="fridge-state" autocomplete="off" checked> ON
-                                        <input type="radio" name="fridge-state" autocomplete="off" > ON
+                                    <label id="manual-fridge-ctl-on" class="btn btn-outline-success btn-sm ">
+                                        <input type="radio" name="fridge-state" autocomplete="off"> ON
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm">
+                                    <label id="manual-fridge-ctl-off" class="btn btn-outline-secondary btn-sm">
                                         <input type="radio" name="fridge-state" autocomplete="off"> OFF
-                                        <input type="radio" name="fridge-state" autocomplete="off" checked> OFF
                                     </label>
                                 </div>
                             </div>
@@ -218,10 +215,10 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
+                                    <input id="temp-alarm-delta-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
-                                        <button class="btn btn-outline-primary btn-sm" id="temp-alarm-set" type="button">Set</button>
+                                        <button class="btn btn-outline-primary btn-sm" id="temp-alarm-delta-set" type="button">Set</button>
                                     </div>
                                 </div>
                             </div>
@@ -234,10 +231,10 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
+                                    <input id="rh-alarm-delta-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
-                                        <button class="btn btn-outline-primary btn-sm" id="rh-alarm-set" type="button">Set</button>
+                                        <button class="btn btn-outline-primary btn-sm" id="rh-alarm-delta-set" type="button">Set</button>
                                     </div>
                                 </div>
                             </div>
