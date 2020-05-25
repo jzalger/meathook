@@ -2,9 +2,9 @@
 Meathook.py contains a class to interface with the meathook device itself.
 J.Zalger 2020
 """
-import time
 import json
 import requests
+import threading
 from string import Template
 from sseclient import SSEClient
 
@@ -39,8 +39,8 @@ class MeatHook:
 
         # Instead of the Web UI polling the device actively, which could result in rate limiting,
         # the object will listen to the status stream and cache the results to return to the client
-        self._subscribe_to_event("main_state", self._update_main_state)
-        self._subscribe_to_event("aux_state", self._update_aux_state)
+        st1 = threading.Thread(target=self._subscribe_to_event, args=("main_state", self._update_main_state)).start()
+        st2 = threading.Thread(target=self._subscribe_to_event, args=("aux_state", self._update_aux_state)).start()
 
     def _get_variable(self, var):
         """Returns the current device state as a JSON formatted string"""

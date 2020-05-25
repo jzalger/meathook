@@ -39,16 +39,22 @@
             <div class="card bg-light">
                 <div class="card-header">
                     Current Status
+                    {% if state.fridge_state == True %}
                     <span id="cooling-badge" class="badge badge-primary">COOLING</span>
+                    {% endif %}
+                    {% if state.rh_state == True %}
                     <span id="rh-badge" class="badge badge-success">HUMIDIFYING</span>
+                    {% endif %}
+                    {% if state.fan_state == True %}
                     <span id="fan-badge" class="badge badge-secondary">FAN ON</span>
+                    {% endif %}
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <i class="fas fa-thermometer-half"></i> Fridge Temperature
                         <div class="progress">
                             <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 25%" aria-valuenow="8"
-                                 aria-valuemin="0" aria-valuemax="20">{{ state.current_temp}} ˚C
+                                 aria-valuemin="0" aria-valuemax="20">{{ state.fridge_temp }} ˚C
                             </div>
                         </div>
                     </li>
@@ -56,7 +62,7 @@
                         <i class="fas fa-tint"></i> Fridge Humidity
                         <div class="progress">
                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 48%"
-                                 aria-valuenow="48" aria-valuemin="0" aria-valuemax="100">{{ state.current_rh }} %
+                                 aria-valuenow="48" aria-valuemin="0" aria-valuemax="100">{{ state.fridge_rh }} %
                             </div>
                         </div>
                     </li>
@@ -65,7 +71,7 @@
                         <div class="progress">
                             <div id="current-ext-temp" class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%"
                                  aria-valuenow="30"
-                                 aria-valuemin="0" aria-valuemax="40">{{ state.current_ext_temp }} ˚C
+                                 aria-valuemin="0" aria-valuemax="40">{{ state.external_temp }} ˚C
                             </div>
                         </div>
                     </li>
@@ -120,10 +126,18 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-success btn-sm active">
+                                        {% if state.fan_state == True %}
                                         <input type="radio" name="fan-state" autocomplete="off" checked> ON
+                                        {% else %}
+                                        <input type="radio" name="fan-state" autocomplete="off" > ON
+                                        {% endif %}
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="fan-state" autocomplete="off"> OFF
+                                        {% if state.fan_state == False %}
+                                        <input type="radio" name="fan-state" autocomplete="off" checked> OFF
+                                        {% else %}
+                                        <input type="radio" name="fan-state" autocomplete="off" > OFF
+                                        {% endif %}
                                     </label>
                                 </div>
                             </div>
@@ -136,7 +150,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input placeholder="Loading" id="temp-setpoint-input" type="text" class="form-control" aria-label="degrees celcius">
+                                    <input placeholder="{{ state.fridge_temp_setpoint }}" id="temp-setpoint-input" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
                                         <button class="btn btn-outline-primary btn-sm" id="temp-setpoint" type="button">Set</button>
@@ -152,7 +166,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
+                                    <input placeholder="{{ state.fridge_rh_setpoint}}" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
                                         <button class="btn btn-outline-primary btn-sm" id="rh-setpoint" type="button">Set</button>
@@ -201,10 +215,18 @@
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-success btn-sm active">
+                                        {% if state.fridge_state == True %}
                                         <input type="radio" name="fridge-state" autocomplete="off" checked> ON
+                                        {% else %}
+                                        <input type="radio" name="fridge-state" autocomplete="off" > ON
+                                        {% endif %}
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm">
+                                        {% if state.fridge_state == True %}
                                         <input type="radio" name="fridge-state" autocomplete="off"> OFF
+                                        {% else %}
+                                        <input type="radio" name="fridge-state" autocomplete="off" checked> OFF
+                                        {% endif %}
                                     </label>
                                 </div>
                             </div>
