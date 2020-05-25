@@ -11,6 +11,11 @@ def main():
     return render_template('meathook.html')
 
 
+@meathook.route("/get-device-state")
+def get_device_state():
+    return jsonify(device.state)
+
+
 @meathook.route("/get-var-state", methods=["GET"])
 def get_var_state():
     var = request.args.get("var")
