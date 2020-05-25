@@ -1,9 +1,8 @@
-var base_url = "localhost:5000"
-
 $(document).ready(function(){
     $("#temp-alert-banner").hide();
     $("#rh-alert-banner").hide();
     $("#door-alert-banner").hide();
+    $("#general-error-banner").hide();
     $("#cooling-badge").hide();
     $("#rh-badge").hide();
     $("#fan-badge").hide();
@@ -14,13 +13,27 @@ $(document).ready(function(){
         var args = {new_state: new_val};
         $.get( "/set-temp-setpoint", args )
         .done(function(result) {
-            if (result == 1) {
-                $("#temp-setpoint-input").prop("placeholder", new_val);
+            console.log(result);
+            if (result === true) {
+                $("#temp-setpoint-input").attr("placeholder", new_val);
+            } else {
+                $("#general-error-banner").text("Error updating temperature setpoint");
+                $("#general-error-banner").show();
             }
         })
     });
     $("#rh-setpoint").button().click(function(){
-
+        var new_val = $("#rh-setpoint-input").val();
+        var args = {new_state: new_val};
+        $.get( "/set-rh-setpoint", args )
+        .done(function(result) {
+            if (result === true) {
+                $("#rh-setpoint-input").attr("placeholder", new_val);
+            } else {
+                $("#general-error-banner").text("Error updating humidity setpoint");
+                $("#general-error-banner").show();
+            }
+        })
     });
     $("#temp-alarm-set").button().click(function(){
 
@@ -28,47 +41,33 @@ $(document).ready(function(){
     $("#rh-alarm-set").button().click(function(){
 
     });
-    $("input[type='button']").click(function(){
-        var value = $("input[name='auto-temp']:checked").val();
-        if(value == "ON"){
-            // Turn on temp control
-        } else {
-            // Turn off temp control
-        }
+    $("input[name='auto-temp']").on("change", function(){
+        var new_val = $("input[name='auto-temp']:checked").val();
+        var args = {new_state: new_val};
+        $.get( "/set-temp-ctl", args )
+        .done(function(result) {
+            console.log(result);
+            if (result === false) {
+                $("#general-error-banner").text("Error updating temperature control");
+                $("#general-error-banner").show();
+            }
+        })
     });
-    $("input[type='button']").click(function(){
-        var value = $("input[name='auto-rh']:checked").val();
-        if(value == "ON"){
-            // Turn on temp control
-        } else {
-            // Turn off temp control
-        }
-    });
-    $("input[type='button']").click(function(){
-        var value = $("input[name='fan-state']:checked").val();
-        if(value == "ON"){
-            // Turn on temp control
-        } else {
-            // Turn off temp control
-        }
-    });
-    $("input[type='button']").click(function(){
-        var value = $("input[name='fridge-state']:checked").val();
-        if(value == "ON"){
-            // Turn on temp control
-        } else {
-            // Turn off temp control
-        }
-    });
-    $("input[type='button']").click(function(){
-        var value = $("input[name='ctl-alg']:checked").val();
-        if(value == "Basic"){
+    $("input[name='auto-rh']").on("change", function(){
+        var new_val = $("input[name='auto-rh']:checked").val();
 
-        } else if (value == "PID") {
+    });
+    $("input[name='fan-state']").on("change", function(){
+        var new_val = $("input[name='fan-state']:checked").val();
 
-        } else if (value == "Learning") {
+    });
+    $("input[name='fridge-state']").on("change", function(){
+        var new_val = $("input[name='fridge-state']:checked").val();
 
-        }
+    });
+    $("input[name='ctl-alg']").on("change", function(){
+        var new_val = $("input[name='ctl-alg']:checked").val();
+
     });
 
     init_state();
@@ -103,7 +102,7 @@ function init_state(){
             $("#temp-ctl-off").removeClass("active");
         } else {
             $("#temp-ctl-off").addClass("active");
-            $("#temp-ctl-on").removClass("active");
+            $("#temp-ctl-on").removeClass("active");
         }
         if (new_state.rh_control === true){
             $("#rh-ctl-on").addClass("active");

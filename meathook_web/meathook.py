@@ -20,7 +20,7 @@ class MeatHook:
     events = []
 
     api_get_url = Template("https://api.particle.io/v1/devices/$device_id/$var_name")
-    api_func_url = Template("https://api.particle.io/v1/devices/$device_id/$func_name?arg=$arg:access_token=$token")
+    api_func_url = Template("https://api.particle.io/v1/devices/$device_id/$func_name")
     api_vitals_url = Template("https://api.particle.io/v1/diagnostics/$device_id/last")
     api_sse_url = Template("https://api.spark.io/v1/events/$event?access_token=$token")
 
@@ -78,10 +78,16 @@ class MeatHook:
         return dict()
 
     def set_temp_setpoint(self, new_setpoint):
-        return self._call_func("set_temp_setpoint", new_setpoint)
+        success = self._call_func("set_temp_setpoint", new_setpoint)
+        if success:
+            self.state['fridge_temp_setpoint'] = new_setpoint
+        return success
 
     def set_rh_setpoint(self, new_setpoint):
-        return self._call_func("set_rh_setpoint", new_setpoint)
+        success = self._call_func("set_rh_setpoint", new_setpoint)
+        if success:
+            self.state["fridge_rh_setpoint"] = new_setpoint
+        return success
 
     def set_fan_state(self, new_state):
         return self._call_func("set_fan_state", new_state)
@@ -90,7 +96,10 @@ class MeatHook:
         return self._call_func("set_fridge_state", new_state)
 
     def set_temp_control(self, new_state):
-        return self._call_func("set_temp_control", new_state)
+        success = self._call_func("set_temp_control", new_state)
+        if success:
+            self.state["temp_control"] = new_state
+        return success
 
     def set_rh_control(self, new_state):
         return self._call_func("set_rh_control", new_state)
@@ -109,13 +118,18 @@ class MeatHook:
 
     def _call_func(self, func_name, arg):
         try:
-            r = requests.get(MeatHook.api_func_url.substitute(dict(device_id=self.device_id, func_name=func_name, arg=str(arg))),
-                             params=dict(access_token=self.token_id))
+            r = requests.post(MeatHook.api_func_url.substitute(
+                dict(device_id=self.device_id, func_name=func_name)), data=dict(args=str(arg), access_token=self.token_id))
             if r.status_code == requests.codes.ok:
                 return True
             else:
+                print("Call to %s failed with arg %s" % (func_name, arg))
+                print(r.url)
+                print(r.headers)
+                print(r.content)
                 return False
         except requests.exceptions.RequestException:
+            print("Request exception for %s failed with arg %s" % (func_name, arg))
             return False
 
     def _subscribe_to_event(self, event, callback):

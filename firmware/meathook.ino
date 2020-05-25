@@ -33,7 +33,7 @@ int compressor_protect_time = 300;  // Time in seconds
 int last_fridge_action = -compressor_protect_time * 1000;
 
 double temp_alarm_delta = 15.0;  //+- deg C from setpoint to trigger alarm
-double rh_alarm_delta = 20.0;    //+= % from setpoint to trigger alarm
+double rh_alarm_delta = 40.0;    //+= % from setpoint to trigger alarm
 
 bool temp_control = FALSE;
 bool rh_control = FALSE;
@@ -57,7 +57,7 @@ SHT1x fridge_sensor(SHT_DATA, SHT_SCK);
 
 String control_algorithm = "basic";
 
-// FIXME: The PID settings here are arbitrary
+// Note: These PID settings here are arbitrary
 PID temp_pid(&fridge_temp, &temp_pid_output, &temp_setpoint, 2.0, 2.0, 1.0, PID::P_ON_M, PID::DIRECT);
 PID rh_pid(&fridge_rh, &rh_pid_output, &rh_setpoint, 2.0, 2.0, 1.0, PID::P_ON_M, PID::DIRECT);
 
@@ -89,6 +89,8 @@ void setup() {
     Particle.function("set_temp_setpoint", set_temp_setpoint);
     Particle.function("set_rh_setpoint", set_rh_setpoint);
     Particle.function("set_control", set_control);
+    Particle.function("set_temp_control", set_temp_control);
+    Particle.function("set_rh_control", set_rh_control);
     Particle.function("set_stream_data", set_stream_data);
     Particle.function("set_stream_interval", set_stream_interval);
     Particle.function("set_temp_alarm_delta", set_temp_alarm_delta);
@@ -168,14 +170,15 @@ void loop() {
         fridge_temp < temp_setpoint - temp_alarm_delta) {
             trigger_temp_alarm();
         }
-    // if (fridge_rh > rh_setpoint + rh_alarm_delta ||
-    //     fridge_rh < rh_setpoint - rh_alarm_delta) {
-    //         trigger_rh_alarm();
-    //     }
+    if (fridge_rh > rh_setpoint + rh_alarm_delta ||
+        fridge_rh < rh_setpoint - rh_alarm_delta) {
+            trigger_rh_alarm();
+        }
 
     // Post readings to the cloud server
     if (stream_data == TRUE) {
         if ((millis() - last_stream_update) / 1000 > (stream_interval * 60)) {
+
             main_state = String(fridge_temp) + "," + String(fridge_rh) + "," + String(external_temp) + "," +
                 String(fridge_state) + "," + String(humidifier_state) + "," + String(fan_state);
 
@@ -187,7 +190,6 @@ void loop() {
             last_stream_update = millis();
         }
     }
-    // Particle.sleep(SLEEP_MODE_DEEP, 900);
 }
 
 void start_fridge(){
@@ -270,6 +272,29 @@ int set_control(String arg){
         return -1;
     }
 }
+int set_temp_control(String arg){
+    if (arg == "ON") {
+        temp_control = TRUE;
+        return 0;
+    } else if (arg == "OFF"){
+        temp_control = FALSE;
+        return 0;
+    } else {
+        return -1;
+    }
+}
+
+int set_rh_control(String arg){
+    if (arg == "ON") {
+        rh_control = TRUE;
+        return 0;
+    } else if (arg == "OFF"){
+        rh_control = FALSE;
+        return 0;
+    } else {
+        return -1;
+    }
+}
 int set_fridge_state(String arg){
     if (arg == "ON") {
         start_fridge();
@@ -327,4 +352,3 @@ int set_control_algorithm(String arg){
         return -1;
     }
 }
-
