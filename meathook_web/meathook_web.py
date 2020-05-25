@@ -12,8 +12,13 @@ device = MeatHook(device_id, particle_token)
 
 @meathook.route('/')
 def main():
-    state = device.state
-    return render_template('meathook.html', state=state)
+    return render_template('meathook.html')
+
+
+@meathook.route("/get-var-state", methods=["GET"])
+def get_var_state():
+    var = request.args.get("var")
+    return device.get_state(var)
 
 
 @meathook.route('/set-temp-ctl', methods=["GET"])

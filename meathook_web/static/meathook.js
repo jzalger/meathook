@@ -1,6 +1,15 @@
 $(document).ready(function(){
-    $("#temp-setpoint").button().click(function(){
+    var base_url = "localhost:5000"
 
+    $("#temp-setpoint").button().click(function(){
+        var new_val = $("%temp-setpoint-input").val();
+        var args = {new_state: new_val};
+        $.get( "$base_url/set-temp-setpoint", args )
+        .done(function(result) {
+            if (result == 1) {
+                $("#temp-setpoint-input").prop("placeholder", new_val);
+            }
+        })
     });
 
     $("#rh-setpoint").button().click(function(){
