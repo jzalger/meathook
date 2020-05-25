@@ -13,7 +13,6 @@ $(document).ready(function(){
         var args = {new_state: new_val};
         $.get( "/set-temp-setpoint", args )
         .done(function(result) {
-            console.log(result);
             if (result === true) {
                 $("#temp-setpoint-input").attr("placeholder", new_val);
             } else {
@@ -36,17 +35,36 @@ $(document).ready(function(){
         })
     });
     $("#temp-alarm-set").button().click(function(){
-
+        var new_val = $("#temp-alarm-delta-input").val();
+        var args = {new_state: new_val};
+        $.get( "/set-temp-alarm-point", args )
+        .done(function(result) {
+            if (result === true) {
+                $("#temp-alarm-delta-input").attr("placeholder", new_val);
+            } else {
+                $("#general-error-banner").text("Error updating temperature alarm threshold");
+                $("#general-error-banner").show();
+            }
+        })
     });
     $("#rh-alarm-set").button().click(function(){
-
+        var new_val = $("#rh-alarm-delta-input").val();
+        var args = {new_state: new_val};
+        $.get( "/set-rh-alarm-point", args )
+        .done(function(result) {
+            if (result === true) {
+                $("#rh-alarm-delta-input").attr("placeholder", new_val);
+            } else {
+                $("#general-error-banner").text("Error updating humidity alarm threshold");
+                $("#general-error-banner").show();
+            }
+        })
     });
     $("input[name='auto-temp']").on("change", function(){
         var new_val = $("input[name='auto-temp']:checked").val();
         var args = {new_state: new_val};
         $.get( "/set-temp-ctl", args )
         .done(function(result) {
-            console.log(result);
             if (result === false) {
                 $("#general-error-banner").text("Error updating temperature control");
                 $("#general-error-banner").show();
@@ -55,26 +73,55 @@ $(document).ready(function(){
     });
     $("input[name='auto-rh']").on("change", function(){
         var new_val = $("input[name='auto-rh']:checked").val();
-
+        var args = {new_state: new_val};
+        $.get( "/set-rh-ctl", args )
+        .done(function(result) {
+            if (result === false) {
+                $("#general-error-banner").text("Error updating humidity control");
+                $("#general-error-banner").show();
+            }
+        })
     });
     $("input[name='fan-state']").on("change", function(){
         var new_val = $("input[name='fan-state']:checked").val();
+        var args = {new_state: new_val};
+        $.get( "/set-fan-state", args )
+        .done(function(result) {
+            if (result === false) {
+                $("#general-error-banner").text("Error updating fan state");
+                $("#general-error-banner").show();
+            }
+        })
 
     });
     $("input[name='fridge-state']").on("change", function(){
         var new_val = $("input[name='fridge-state']:checked").val();
-
+        var args = {new_state: new_val};
+        $.get( "/set-fridge-state", args )
+        .done(function(result) {
+            if (result === false) {
+                $("#general-error-banner").text("Error updating fridge state");
+                $("#general-error-banner").show();
+            }
+        })
     });
     $("input[name='ctl-alg']").on("change", function(){
         var new_val = $("input[name='ctl-alg']:checked").val();
-
+        var args = {new_state: new_val};
+        $.get( "/set-ctl-alg", args )
+        .done(function(result) {
+            if (result === false) {
+                $("#general-error-banner").text("Error updating control algorithm");
+                $("#general-error-banner").show();
+            }
+        })
     });
-
     init_state();
 });
 
 function init_state(){
     $.get("/get-device-state").done(function(new_state) {
+    console.log(new_state);
         // Alerts
         if (new_state.temp_alarm === true) {
             $("#temp-alert-banner").show();
@@ -82,8 +129,9 @@ function init_state(){
         if (new_state.rh_alarm === true) {
             $("#rh-alert-banner").show();
         }
-        // TODO: Add Door alert once added to the firmware
-
+        if (new_state.door_state === true) {
+            $("#door-alert-banner").show();
+        }
         // Current State
         if (new_state.fridge_state === "1"){
             $("#cooling-badge").toggle();
@@ -97,14 +145,14 @@ function init_state(){
         $("#fridge-temp").text(parseFloat(new_state.fridge_temp).toFixed(1) + " ˚C");
         $("#fridge-rh").text(parseFloat(new_state.fridge_rh).toFixed(0) + " %");
         $("#external-temp").text(parseFloat(new_state.external_temp).toFixed(1) + " ˚C");
-        if (new_state.temp_control === true){
+        if (new_state.temp_control === "1"){
             $("#temp-ctl-on").addClass("active");
             $("#temp-ctl-off").removeClass("active");
         } else {
             $("#temp-ctl-off").addClass("active");
             $("#temp-ctl-on").removeClass("active");
         }
-        if (new_state.rh_control === true){
+        if (new_state.rh_control === "1"){
             $("#rh-ctl-on").addClass("active");
             $("#rh-ctl-off").removeClass("active");
         } else {

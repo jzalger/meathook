@@ -180,10 +180,11 @@ void loop() {
         if ((millis() - last_stream_update) / 1000 > (stream_interval * 60)) {
 
             main_state = String(fridge_temp) + "," + String(fridge_rh) + "," + String(external_temp) + "," +
-                String(fridge_state) + "," + String(humidifier_state) + "," + String(fan_state);
+                String(fridge_state) + "," + String(humidifier_state) + "," + String(fan_state) + "," + String(door_state);
 
             aux_state = String(temp_setpoint) + "," +  String(rh_setpoint) + "," +  String(temp_alarm) + "," +
-                String(rh_alarm) + "," + control_algorithm + "," + String(temp_alarm_delta) + "," + String(rh_alarm_delta);
+                String(rh_alarm) + "," + control_algorithm + "," + String(temp_alarm_delta) + "," + String(rh_alarm_delta)
+                + "," + String(temp_control) + "," + String(rh_control);
 
             Particle.publish("main_state", main_state);
             Particle.publish("aux_state", aux_state);
@@ -352,3 +353,4 @@ int set_control_algorithm(String arg){
         return -1;
     }
 }
+

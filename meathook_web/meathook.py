@@ -12,7 +12,7 @@ from sseclient import SSEClient
 class MeatHook:
 
     main_state_mapping = ["fridge_temp", "fridge_rh", "external_temp",
-                          "fridge_state", "humidifier_state", "fan_state"]
+                          "fridge_state", "humidifier_state", "fan_state", "door_state"]
     aux_state_mapping = ["fridge_temp_setpoint", "fridge_rh_setpoint", "temp_alarm", "rh_alarm",
                          "control_algorithm", "temp_alarm_delta", "rh_alarm_delta", "temp_control", "rh_control"]
 
@@ -124,12 +124,9 @@ class MeatHook:
                 return True
             else:
                 print("Call to %s failed with arg %s" % (func_name, arg))
-                print(r.url)
-                print(r.headers)
                 print(r.content)
                 return False
         except requests.exceptions.RequestException:
-            print("Request exception for %s failed with arg %s" % (func_name, arg))
             return False
 
     def _subscribe_to_event(self, event, callback):
