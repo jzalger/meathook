@@ -5,15 +5,10 @@ from secrets import device_id, particle_token
 meathook = Flask(__name__)
 device = MeatHook(device_id, particle_token)
 
-#     return dict(current_temp=8.5, current_rh=46, current_ext_temp=30,
-#                 temp_alert=False, rh_alert=False, door_alert=False,
-#                 temp_setpoint=8.6, rh_setpoint=45, temp_alarm_delta=10, rh_alarm_delta=20)
-
 
 @meathook.route('/')
 def main():
-    state = device.state
-    return render_template('meathook.html', state=state)
+    return render_template('meathook.html')
 
 
 @meathook.route("/get-var-state", methods=["GET"])

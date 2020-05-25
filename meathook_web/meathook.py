@@ -11,12 +11,11 @@ from sseclient import SSEClient
 
 class MeatHook:
 
-    variables = ["external_temp", "fridge_temp", "fridge_rh", "fridge_temp_setpoint",
-                 "fridge_state", "fridge_rh_setpoint"]
     main_state_mapping = ["fridge_temp", "fridge_rh", "external_temp",
                           "fridge_state", "humidifier_state", "fan_state"]
-    aux_state_mapping = ["temp_setpoint", "rh_setpoint", "temp_alarm", "rh_alarm",
+    aux_state_mapping = ["fridge_temp_setpoint", "fridge_rh_setpoint", "temp_alarm", "rh_alarm",
                          "control_algorithm", "temp_alarm_delta", "rh_alarm_delta"]
+    variables = main_state_mapping + aux_state_mapping
     events = []
 
     api_get_url = Template("https://api.particle.io/v1/devices/$device_id/$var_name")
@@ -59,6 +58,7 @@ class MeatHook:
         return state
 
     def _get_state(self):
+        print("Querying the device state. Will take ~15s")
         state = dict()
         for var in MeatHook.variables:
             state[var] = self._get_variable(var)
