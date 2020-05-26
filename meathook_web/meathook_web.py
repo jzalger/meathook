@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from meathook import MeatHook
-from secrets import device_id, particle_token
+from secrets import device_id, particle_token, web_host
 
 meathook = Flask(__name__)
 device = MeatHook(device_id, particle_token)
@@ -77,4 +77,4 @@ def set_rh_alarm_threashold():
 
 
 if __name__ == '__main__':
-    meathook.run(debug=True)
+    meathook.run(debug=True, host=web_host)
