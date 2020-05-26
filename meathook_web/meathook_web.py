@@ -67,13 +67,13 @@ def set_fridge_state():
 @meathook.route("/set-temp-alarm-point", methods=["GET"])
 def set_temp_alarm_threashold():
     new_state = request.args.get("new_state")
-    return jsonify(device.set_temp_alarm_point(new_state))
+    return jsonify(device.set_temp_alarm_setpoint(new_state))
 
 
 @meathook.route("/set-rh-alarm-point", methods=["GET"])
 def set_rh_alarm_threashold():
     new_state = request.args.get("new_state")
-    return jsonify(device.set_rh_alarm_point(new_state))
+    return jsonify(device.set_rh_alarm_setpoint(new_state))
 
 
 if __name__ == '__main__':

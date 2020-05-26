@@ -10,3 +10,6 @@ body {
 .control-sub-row {
     padding-top:6px;
 }
+.progress-large {
+    height: 25px;
+}

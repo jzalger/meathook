@@ -45,7 +45,7 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <i class="fas fa-thermometer-half"></i> Fridge Temperature
-                        <div class="progress">
+                        <div class="progress progress-large">
                             <div id="fridge-temp" class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 25%" aria-valuenow="8"
                                  aria-valuemin="0" aria-valuemax="20"> ˚C
                             </div>
@@ -53,7 +53,7 @@
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-tint"></i> Fridge Humidity
-                        <div class="progress">
+                        <div class="progress progress-large">
                             <div id="fridge-rh" class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 48%"
                                  aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"> %
                             </div>
@@ -61,7 +61,7 @@
                     </li>
                     <li class="list-group-item">
                         <i class="fas fa-thermometer-half"></i> External Temperature
-                        <div class="progress">
+                        <div class="progress progress-large">
                             <div id="external-temp" class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%"
                                  aria-valuenow="30"
                                  aria-valuemin="0" aria-valuemax="40"> ˚C
@@ -87,10 +87,10 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label id="temp-ctl-on" class="btn btn-outline-success btn-sm ">
-                                        <input type="radio" name="auto-temp" autocomplete="off">ON
+                                        <input id="temp-ctl-on-input" type="radio" name="auto-temp" value="ON" autocomplete="off">ON
                                     </label>
                                     <label id="temp-ctl-off" class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="auto-temp" autocomplete="off">OFF
+                                        <input id="temp-ctl-off-input" type="radio" name="auto-temp" value="OFF" autocomplete="off">OFF
                                     </label>
                                 </div>
                             </div>
@@ -102,10 +102,10 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label id="rh-ctl-on" class="btn btn-outline-success btn-sm ">
-                                        <input  type="radio" name="auto-rh" autocomplete="off" >ON
+                                        <input id="rh-ctl-on-input" type="radio" name="auto-rh" value="ON" autocomplete="off" >ON
                                     </label>
                                     <label id="rh-ctl-off" class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="auto-rh" autocomplete="off">OFF
+                                        <input id="rh-ctl-off-input" type="radio" name="auto-rh" value="OFF" autocomplete="off">OFF
                                     </label>
                                 </div>
                             </div>
@@ -119,10 +119,10 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label id="fan-ctl-on" class="btn btn-outline-success btn-sm">
-                                        <input  type="radio" name="fan-state" autocomplete="off" >ON
+                                        <input id="fan-ctl-on-input" type="radio" name="fan-state" value="ON" autocomplete="off" >ON
                                     </label>
                                     <label id="fan-ctl-off" class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="fan-state" autocomplete="off">OFF
+                                        <input id="fan-ctl-off-input" type="radio" name="fan-state" value="OFF" autocomplete="off">OFF
                                     </label>
                                 </div>
                             </div>
@@ -180,13 +180,13 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label id="control-alg-basic" class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="ctl-alg" autocomplete="off" > Basic
+                                        <input id="control-alg-basic-input" value="basic" type="radio" name="ctl-alg" autocomplete="off" > Basic
                                     </label>
                                     <label id="control-alg-pid" class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="ctl-alg" autocomplete="off"> PID
+                                        <input id="control-alg-pid-input" value="pid" type="radio" name="ctl-alg" autocomplete="off"> PID
                                     </label>
                                     <label id="control-alg-learn" class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="ctl-alg" autocomplete="off"> Learning
+                                        <input id="control-alg-learn-input" value="learn" type="radio" name="ctl-alg" autocomplete="off"> Learning
                                     </label>
                                 </div>
                             </div>
@@ -200,10 +200,10 @@
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label id="manual-fridge-ctl-on" class="btn btn-outline-success btn-sm ">
-                                        <input type="radio" name="fridge-state" autocomplete="off"> ON
+                                        <input id="manual-fridge-ctl-on-input" value="ON" type="radio" name="fridge-state" autocomplete="off"> ON
                                     </label>
                                     <label id="manual-fridge-ctl-off" class="btn btn-outline-secondary btn-sm">
-                                        <input type="radio" name="fridge-state" autocomplete="off"> OFF
+                                        <input id="manual-fridge-ctl-off-input" value="OFF" type="radio" name="fridge-state" autocomplete="off"> OFF
                                     </label>
                                 </div>
                             </div>

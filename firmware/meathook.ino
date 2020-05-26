@@ -35,7 +35,7 @@ int last_fridge_action = -compressor_protect_time * 1000;
 double temp_alarm_delta = 15.0;  //+- deg C from setpoint to trigger alarm
 double rh_alarm_delta = 40.0;    //+= % from setpoint to trigger alarm
 
-bool temp_control = FALSE;
+bool temp_control = TRUE;
 bool rh_control = FALSE;
 bool fan_state = FALSE;
 bool fridge_state = FALSE;
@@ -168,11 +168,17 @@ void loop() {
     // Trigger any system alarms
     if (fridge_temp > temp_setpoint + temp_alarm_delta ||
         fridge_temp < temp_setpoint - temp_alarm_delta) {
+            temp_alarm = TRUE;
             trigger_temp_alarm();
+        } else {
+            temp_alarm = FALSE;
         }
     if (fridge_rh > rh_setpoint + rh_alarm_delta ||
         fridge_rh < rh_setpoint - rh_alarm_delta) {
+            rh_alarm = TRUE;
             trigger_rh_alarm();
+        } else {
+            rh_alarm = FALSE;
         }
 
     // Post readings to the cloud server
@@ -231,16 +237,12 @@ void stop_humidifier(){
 }
 
 void trigger_temp_alarm() {
-    char alarm_str[10] = {""};
-    sprintf(alarm_str, "TEMP_ALARM");
-    // FIXME: Rate limit this with last_alarm variable
-    Particle.publish("temp_alarm", alarm_str);
+    // TODO: Rate limit this with last_alarm variable
+    Particle.publish("temp_alarm", "true");
 }
 
 void trigger_rh_alarm(){
-    char alarm_str[14] = {""};
-    sprintf(alarm_str, "HUMIDITY ALARM");
-    Particle.publish("rh_alarm", alarm_str);
+    Particle.publish("rh_alarm", "true");
 }
 
 void manage_light(){
@@ -353,4 +355,3 @@ int set_control_algorithm(String arg){
         return -1;
     }
 }
-
