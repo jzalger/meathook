@@ -142,7 +142,6 @@ void loop() {
         }
     }
 
-    /*
     if (rh_control == TRUE) {
         if (control_algorithm == "pid"){
             rh_pid.Compute();
@@ -157,7 +156,6 @@ void loop() {
             }
         }
     }
-    */
 
     if (fan_state == TRUE) {
         start_fan();
