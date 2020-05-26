@@ -238,11 +238,11 @@ void stop_humidifier(){
 
 void trigger_temp_alarm() {
     // TODO: Rate limit this with last_alarm variable
-    Particle.publish("temp_alarm", "true");
+    Particle.publish("temp_alarm", "1");
 }
 
 void trigger_rh_alarm(){
-    Particle.publish("rh_alarm", "true");
+    Particle.publish("rh_alarm", "1");
 }
 
 void manage_light(){
@@ -355,3 +355,4 @@ int set_control_algorithm(String arg){
         return -1;
     }
 }
+

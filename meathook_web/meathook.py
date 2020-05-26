@@ -41,8 +41,10 @@ class MeatHook:
 
         # Instead of the Web UI polling the device actively, which could result in rate limiting,
         # the object will listen to the status stream and cache the results to return to the client
-        _st1 = threading.Thread(target=self._subscribe_to_event, args=("main_state", self._update_main_state)).start()
-        _st2 = threading.Thread(target=self._subscribe_to_event, args=("aux_state", self._update_aux_state)).start()
+        _t1 = threading.Thread(target=self._subscribe_to_event, args=("main_state", self._update_main_state)).start()
+        _t2 = threading.Thread(target=self._subscribe_to_event, args=("aux_state", self._update_aux_state)).start()
+        _t3 = threading.Thread(target=self._subscribe_to_event, args=("temp_alarm", self._handle_temp_alarm)).start()
+        _t4 = threading.Thread(target=self._subscribe_to_event, args=("rh_alarm", self._handle_rh_alarm)).start()
 
     def _get_variable(self, var):
         """Returns the current device state as a JSON formatted string"""
@@ -71,6 +73,7 @@ class MeatHook:
             state[var] = self._get_variable(var)
         return state
 
+    # Event handlers
     def _update_main_state(self, msg):
         s = msg['data'].split(',')
         self.state.update({k: v for (k, v) in zip(MeatHook.main_state_mapping, s)})
@@ -78,6 +81,14 @@ class MeatHook:
     def _update_aux_state(self, msg):
         s = msg['data'].split(',')
         self.state.update({k: v for (k, v) in zip(MeatHook.aux_state_mapping, s)})
+
+    def _handle_temp_alarm(self, msg):
+        s = msg['data']
+        self.state['temp_alarm'] = "1"
+
+    def _handle_rh_alarm(self, msg):
+        s = msg['data']
+        self.state['rh_alarm'] = "1"
 
     @property
     def device_health(self):
