@@ -9,71 +9,31 @@ $(document).ready(function(){
 
     // Button Actions
     $("#temp-setpoint").button().click(function(){
-        var new_val = $("#temp-setpoint-input").val();
-        var args = {new_state: new_val};
-        $.get( "/set-temp-setpoint", args )
-        .done(function(result) {
-            if (result === true) {
-                $("#temp-setpoint-input").attr("placeholder", new_val);
-            } else {
-                $("#general-error-banner").text("Error updating temperature setpoint");
-                $("#general-error-banner").show();
-            }
-        })
+        button_function($("#temp-setpoint-input"), "/set-temp-setpoint", "Error updating temperature setpoint");
     });
     $("#rh-setpoint").button().click(function(){
-        var new_val = $("#rh-setpoint-input").val();
-        var args = {new_state: new_val};
-        $.get( "/set-rh-setpoint", args )
-        .done(function(result) {
-            if (result === true) {
-                $("#rh-setpoint-input").attr("placeholder", new_val);
-            } else {
-                $("#general-error-banner").text("Error updating humidity setpoint");
-                $("#general-error-banner").show();
-            }
-        })
+        button_function($("#rh-setpoint-input"), "/set-rh-setpoint", "Error updating humidity setpoint");
     });
     $("#temp-alarm-delta-set").button().click(function(){
-        var new_val = $("#temp-alarm-delta-input").val();
-        var args = {new_state: new_val};
-        $.get( "/set-temp-alarm-point", args )
-        .done(function(result) {
-            if (result === true) {
-                $("#temp-alarm-delta-input").attr("placeholder", new_val);
-            } else {
-                $("#general-error-banner").text("Error updating temperature alarm threshold");
-                $("#general-error-banner").show();
-            }
-        })
+        button_function($("#temp-alarm-delta-input"), "/set-temp-alarm-point", "Error updating temperature alarm threshold");
     });
     $("#rh-alarm-delta-set").button().click(function(){
-        var new_val = $("#rh-alarm-delta-input").val();
-        var args = {new_state: new_val};
-        $.get( "/set-rh-alarm-point", args )
-        .done(function(result) {
-            if (result === true) {
-                $("#rh-alarm-delta-input").attr("placeholder", new_val);
-            } else {
-                $("#general-error-banner").text("Error updating humidity alarm threshold");
-                $("#general-error-banner").show();
-            }
-        })
+        button_function($("#rh-alarm-delta-input"), "/set-rh-alarm-point", "Error updating humidity alarm threshold");
     });
     $("input[name='auto-temp']").on("change", function(){
-        radio_function($("input[name='auto-temp']:checked"), "/set-temp-ctl", "Error updating temperature control")
+        button_function($("input[name='auto-temp']:checked"), "/set-temp-ctl", "Error updating temperature control");
     });
     $("input[name='auto-rh']").on("change", function(){
-        radio_function($("input[name='auto-rh']:checked"), "/set-rh-ctl", "Error updating humidity control")
+        button_function($("input[name='auto-rh']:checked"), "/set-rh-ctl", "Error updating humidity control");
     });
     $("input[name='fan-state']").on("change", function(){
-        radio_function($("input[name='fan-state']:checked"), "/set-fan-state", "Error updating fan state")
+        button_function($("input[name='fan-state']:checked"), "/set-fan-state", "Error updating fan state");
     });
     $("input[name='fridge-state']").on("change", function(){
-        radio_function($("input[name='fridge-state']:checked"), "/set-fridge-state", "Error updating fridge state")
+        button_function($("input[name='fridge-state']:checked"), "/set-fridge-state", "Error updating fridge state");
     });
     $("input[name='ctl-alg']").on("change", function(){
-        radio_function($("input[name='ctl-alg']:checked"), "/set-ctl-alg", "Error updating control algorithm")
+        button_function($("input[name='ctl-alg']:checked"), "/set-ctl-alg", "Error updating control algorithm");
     });
     init_state();
 });
@@ -83,7 +43,7 @@ function set_status_bar(elem, current_val, max_val) {
     $(elem).css("width", percent + "%");
 }
 
-function radio_function(elem, url, error_msg){
+function button_function(elem, url, error_msg){
     var new_val = $(elem).val();
     var args = {new_state: new_val};
     $.get( url, args )
