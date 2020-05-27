@@ -61,74 +61,38 @@ $(document).ready(function(){
         })
     });
     $("input[name='auto-temp']").on("change", function(){
-        var new_val = $("input[name='auto-temp']:checked").val();
-        var args = {new_state: new_val};
-        $.get( "/set-temp-ctl", args )
-        .done(function(result) {
-            if (result === false) {
-                $("#general-error-banner").text("Error updating temperature control");
-                $("#general-error-banner").show();
-            }
-        })
+        radio_function($("input[name='auto-temp']:checked"), "/set-temp-ctl", "Error updating temperature control")
     });
     $("input[name='auto-rh']").on("change", function(){
-        var new_val = $("input[name='auto-rh']:checked").val();
-        var args = {new_state: new_val};
-        $.get( "/set-rh-ctl", args )
-        .done(function(result) {
-            if (result === false) {
-                $("#general-error-banner").text("Error updating humidity control");
-                $("#general-error-banner").show();
-            }
-        })
+        radio_function($("input[name='auto-rh']:checked"), "/set-rh-ctl", "Error updating humidity control")
     });
     $("input[name='fan-state']").on("change", function(){
-        var new_val = $("input[name='fan-state']:checked").val();
-        var args = {new_state: new_val};
-        $.get( "/set-fan-state", args )
-        .done(function(result) {
-            if (result === false) {
-                $("#general-error-banner").text("Error updating fan state");
-                $("#general-error-banner").show();
-            }
-        })
-
+        radio_function($("input[name='fan-state']:checked"), "/set-fan-state", "Error updating fan state")
     });
     $("input[name='fridge-state']").on("change", function(){
-        var new_val = $("input[name='fridge-state']:checked").val();
-        var args = {new_state: new_val};
-        $.get( "/set-fridge-state", args )
-        .done(function(result) {
-            if (result === false) {
-                $("#general-error-banner").text("Error updating fridge state");
-                $("#general-error-banner").show();
-            }
-        })
+        radio_function($("input[name='fridge-state']:checked"), "/set-fridge-state", "Error updating fridge state")
     });
     $("input[name='ctl-alg']").on("change", function(){
-        var new_val = $("input[name='ctl-alg']:checked").val();
-        var args = {new_state: new_val};
-        $.get( "/set-ctl-alg", args )
-        .done(function(result) {
-            if (result === false) {
-                $("#general-error-banner").text("Error updating control algorithm");
-                $("#general-error-banner").show();
-            }
-        })
+        radio_function($("input[name='ctl-alg']:checked"), "/set-ctl-alg", "Error updating control algorithm")
     });
     init_state();
 });
 
+function set_status_bar(elem, current_val, max_val) {
+    var percent = current_val / max_val * 100;
+    $(elem).css("width", percent + "%");
+}
+
 function radio_function(elem, url, error_msg){
-        var new_val = $(elem).val();
-        var args = {new_state: new_val};
-        $.get( url, args )
-        .done(function(result) {
-            if (result === false) {
-                $("#general-error-banner").text(error_msg);
-                $("#general-error-banner").show();
-            }
-        })
+    var new_val = $(elem).val();
+    var args = {new_state: new_val};
+    $.get( url, args )
+    .done(function(result) {
+        if (result === false) {
+            $("#general-error-banner").text(error_msg);
+            $("#general-error-banner").show();
+        }
+    })
 };
 
 function init_state(){
@@ -155,8 +119,13 @@ function init_state(){
         }
 
         $("#fridge-temp").text(parseFloat(new_state.fridge_temp).toFixed(1) + " ˚C");
+        set_status_bar($("#fridge-temp"), parseFloat(new_state.fridge_temp), 20.0);
+
         $("#fridge-rh").text(parseFloat(new_state.fridge_rh).toFixed(0) + " %");
+        set_status_bar($("#fridge-rh"), parseFloat(new_state.fridge_rh), 100.0);
+
         $("#external-temp").text(parseFloat(new_state.external_temp).toFixed(1) + " ˚C");
+        set_status_bar($("#external-temp"), parseFloat(new_state.external_temp), 45.0);
 
         if (new_state.temp_control === "1"){
             $("#temp-ctl-on").addClass("active");
