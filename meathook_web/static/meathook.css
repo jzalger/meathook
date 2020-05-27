@@ -1,0 +1,15 @@
+body {
+    background: aliceblue !important;
+}
+.container {
+    padding-bottom:30px;
+}
+.main-row {
+    padding-top:10px;
+}
+.control-sub-row {
+    padding-top:6px;
+}
+.progress-large {
+    height: 25px;
+}
