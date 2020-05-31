@@ -102,10 +102,10 @@
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label id="rh-ctl-on" class="btn btn-outline-success btn-sm ">
-                                        <input id="rh-ctl-on-input" type="radio" name="auto-rh" value="ON" autocomplete="off" >ON
+                                        <input id="rh-ctl-on-input" type="radio" name="auto-rh" value="ON" autocomplete="off" disabled>ON
                                     </label>
                                     <label id="rh-ctl-off" class="btn btn-outline-secondary btn-sm">
-                                        <input id="rh-ctl-off-input" type="radio" name="auto-rh" value="OFF" autocomplete="off">OFF
+                                        <input id="rh-ctl-off-input" type="radio" name="auto-rh" value="OFF" autocomplete="off" disabled>OFF
                                     </label>
                                 </div>
                             </div>
@@ -154,7 +154,7 @@
                                     <input id="rh-setpoint-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
-                                        <button class="btn btn-outline-primary btn-sm" id="rh-setpoint" type="button">Set</button>
+                                        <button class="btn btn-outline-primary btn-sm" id="rh-setpoint" type="button" disabled>Set</button>
                                     </div>
                                 </div>
                             </div>
@@ -165,6 +165,55 @@
         </div>
     </div>
 
+    <div class="row main-row justify-content-center">
+        <div class="col-sm-12 col-lg-8">
+            <div class="card bg-light">
+                <div class="card-header">
+                    Energy Saving
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-6">
+                                <i class="fas fa-dollar-sign"></i> Enable
+                            </div>
+                            <div class="col-4">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label id="energy-saving-on" class="btn btn-outline-success btn-sm">
+                                        <input id="energy-saving-on-input" type="radio" name="fan-state" value="ON" autocomplete="off" >ON
+                                    </label>
+                                    <label id="energy-saving-off" class="btn btn-outline-secondary btn-sm">
+                                        <input id="energy-saving-off-input" type="radio" name="fan-state" value="OFF" autocomplete="off">OFF
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-6">
+                                <i class="fas fa-thermometer-half"></i> Overnight Temperature
+                            </div>
+                            <div class="col-4">
+                                <div class="input-group input-group-sm mb-3">
+                                    <input id="overnight-temp-input" placeholder="Loading" type="text"
+                                           class="form-control"
+                                           aria-label="degrees celcius">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">˚C</span>
+                                        <button class="btn btn-outline-primary btn-sm" id="overnight-temp-btn"
+                                                type="button">
+                                            Set
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
             <div class="card bg-light">
