@@ -36,9 +36,8 @@ $(document).ready(function(){
         button_function($("input[name='ctl-alg']:checked"), "/set-ctl-alg", "Error updating control algorithm");
     });
     init_state();
-});
 
-$(window).bind('onload',function() {
+    // Turn on lights for the livestream
     $.get("/set_led_state", {new_state: "ON"});
 });
 

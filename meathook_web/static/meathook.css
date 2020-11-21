@@ -13,3 +13,12 @@ body {
 .progress-large {
     height: 25px;
 }
+@media (max-width: 500px) {
+.rotate-stream{
+transform:rotate(90deg);
+-ms-transform:rotate(90deg); /* IE 9 */
+-moz-transform:rotate(90deg); /* Firefox */
+-webkit-transform:rotate(90deg); /* Safari and Chrome */
+-o-transform:rotate(90deg); /* Opera */
+}
+}
