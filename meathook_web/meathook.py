@@ -94,6 +94,12 @@ class MeatHook:
     def device_health(self):
         return dict()
 
+    def set_led_state(self, new_light_state):
+        success = self._call_func("set_led_state", new_light_state)
+        if success:
+            self.state['led_state'] = new_light_state
+        return success
+
     def set_temp_setpoint(self, new_setpoint):
         success = self._call_func("set_temp_setpoint", new_setpoint)
         if success:

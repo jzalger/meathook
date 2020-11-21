@@ -22,6 +22,12 @@ def get_var_state():
     return jsonify(device.state(var))
 
 
+@meathook.route("/set_led_state", methods=["GET"])
+def set_led_state():
+    new_state = request.args.get("new_state")
+    return jsonify(device.set_led_state(new_state))
+
+
 @meathook.route('/set-temp-ctl', methods=["GET"])
 def set_temp_control():
     new_state = request.args.get("new_state")

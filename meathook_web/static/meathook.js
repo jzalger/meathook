@@ -38,6 +38,14 @@ $(document).ready(function(){
     init_state();
 });
 
+$(window).bind('onload',function() {
+    $.get("/set_led_state", {new_state: "ON"});
+});
+
+$(window).bind('beforeunload', function() {
+  $.get("/set_led_state", {new_state: "OFF"});
+});
+
 function set_status_bar(elem, current_val, max_val) {
     var percent = current_val / max_val * 100;
     $(elem).css("width", percent + "%");
