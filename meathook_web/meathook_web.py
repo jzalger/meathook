@@ -1,9 +1,13 @@
+import os
+import importlib.util
 from flask import Flask, render_template, request, jsonify
 from meathook import MeatHook
-from secrets import device_id, particle_token, web_host
+spec = importlib.util.spec_from_file_location("secrets", os.getenv("SECRETS_FILE"))
+secrets = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(secrets)
 
 meathook = Flask(__name__)
-device = MeatHook(device_id, particle_token)
+device = MeatHook(secrets.device_id, secrets.particle_token)
 
 
 @meathook.route('/')
@@ -83,4 +87,4 @@ def set_rh_alarm_threashold():
 
 
 if __name__ == '__main__':
-    meathook.run(debug=True, host=web_host)
+    meathook.run(debug=True, host=secrets.web_host)
