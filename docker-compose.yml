@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - "5100:5100"
+    environment:
+      PHCONFIG_FILE: /run/secrets/secrets.py
+    restart: always
+    secrets:
+      - secrets.py
+
+secrets:
+  secrets.py:
+    file: secrets.py
