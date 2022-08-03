@@ -5,11 +5,11 @@ services:
     ports:
       - "5100:5100"
     environment:
-      PHCONFIG_FILE: /run/secrets/secrets.py
+      MHCONFIG_FILE: /run/secrets/mhconfig.py
     restart: always
     secrets:
-      - secrets.py
+      - mhconfig.py
 
 secrets:
-  secrets.py:
-    file: secrets.py
+  mhconfig.py:
+    file: mhconfig.py

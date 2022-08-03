@@ -9,8 +9,8 @@ The web application backend is written in Python using the Flask framework. The 
 ## Circuit and PCB Design
 Below is a simple block diagram showing the sensors and actuators in the fridge.
 
-![Block Diagram](docs/block_diagram.png?"raw=true)
+![Block Diagram](docs/img/block_diagram.png?"raw=true)
 
-![Schematic](docs/schematic.png?raw=true)
+![Schematic](docs/img/schematic.png?raw=true)
 
-![PCB](docs/pcb.png?raw=true)
+![PCB](docs/img/pcb.png?raw=true)

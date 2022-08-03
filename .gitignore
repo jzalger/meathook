@@ -129,4 +129,6 @@ dmypy.json
 .pyre/
 
 secrets.py
+mhconfig.py
 notes.txt
+.idea/
