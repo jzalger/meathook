@@ -39,7 +39,6 @@
                     Current Status
 
                     <span id="cooling-badge" class="badge badge-primary">COOLING</span>
-                    <span id="rh-badge" class="badge badge-success">HUMIDIFYING</span>
                     <span id="fan-badge" class="badge badge-secondary">FAN ON</span>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -76,16 +75,6 @@
         <div class="col-sm-12 col-lg-8">
             <div class="card bg-light">
                 <div class="card-header">
-                    Live View
-                </div>
-                <img class="card-image-bottom" src="http://192.168.1.52:8080/?action=stream" alt="Live Stream" />
-            </div>
-        </div>
-    </div>
-    <div class="row main-row justify-content-center">
-        <div class="col-sm-12 col-lg-8">
-            <div class="card bg-light">
-                <div class="card-header">
                     Controls
                 </div>
                 <ul class="list-group list-group-flush">
@@ -101,21 +90,6 @@
                                     </label>
                                     <label id="temp-ctl-off" class="btn btn-outline-secondary btn-sm">
                                         <input id="temp-ctl-off-input" type="radio" name="auto-temp" value="OFF" autocomplete="off">OFF
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row control-sub-row">
-                            <div class="col-6">
-                                <i class="fas fa-tint"></i> Automatic Humidity
-                            </div>
-                            <div class="col">
-                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label id="rh-ctl-on" class="btn btn-outline-success btn-sm ">
-                                        <input id="rh-ctl-on-input" type="radio" name="auto-rh" value="ON" autocomplete="off" disabled>ON
-                                    </label>
-                                    <label id="rh-ctl-off" class="btn btn-outline-secondary btn-sm">
-                                        <input id="rh-ctl-off-input" type="radio" name="auto-rh" value="OFF" autocomplete="off" disabled>OFF
                                     </label>
                                 </div>
                             </div>
@@ -149,22 +123,6 @@
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
                                         <button class="btn btn-outline-primary btn-sm" id="temp-setpoint" type="button">Set</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-6">
-                                <i class="fas fa-tint"></i> Humidity Setpoint
-                            </div>
-                            <div class="col-4">
-                                <div class="input-group input-group-sm mb-3">
-                                    <input id="rh-setpoint-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">%</span>
-                                        <button class="btn btn-outline-primary btn-sm" id="rh-setpoint" type="button" disabled>Set</button>
                                     </div>
                                 </div>
                             </div>
@@ -291,10 +249,10 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input id="rh-alarm-delta-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
+                                    <input id="rh-alarm-limit-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
-                                        <button class="btn btn-outline-primary btn-sm" id="rh-alarm-delta-set" type="button">Set</button>
+                                        <button class="btn btn-outline-primary btn-sm" id="rh-alarm-limit-set" type="button">Set</button>
                                     </div>
                                 </div>
                             </div>

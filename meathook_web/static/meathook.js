@@ -11,20 +11,14 @@ $(document).ready(function(){
     $("#temp-setpoint").button().click(function(){
         button_function($("#temp-setpoint-input"), "/set-temp-setpoint", "Error updating temperature setpoint");
     });
-    $("#rh-setpoint").button().click(function(){
-        button_function($("#rh-setpoint-input"), "/set-rh-setpoint", "Error updating humidity setpoint");
-    });
     $("#temp-alarm-delta-set").button().click(function(){
         button_function($("#temp-alarm-delta-input"), "/set-temp-alarm-point", "Error updating temperature alarm threshold");
     });
-    $("#rh-alarm-delta-set").button().click(function(){
-        button_function($("#rh-alarm-delta-input"), "/set-rh-alarm-point", "Error updating humidity alarm threshold");
+    $("#rh-alarm-limit-set").button().click(function(){
+        button_function($("#rh-alarm-limit-input"), "/set-rh-alarm-limit", "Error updating humidity alarm threshold");
     });
     $("input[name='auto-temp']").on("change", function(){
         button_function($("input[name='auto-temp']:checked"), "/set-temp-ctl", "Error updating temperature control");
-    });
-    $("input[name='auto-rh']").on("change", function(){
-        button_function($("input[name='auto-rh']:checked"), "/set-rh-ctl", "Error updating humidity control");
     });
     $("input[name='fan-state']").on("change", function(){
         button_function($("input[name='fan-state']:checked"), "/set-fan-state", "Error updating fan state");
@@ -36,13 +30,6 @@ $(document).ready(function(){
         button_function($("input[name='ctl-alg']:checked"), "/set-ctl-alg", "Error updating control algorithm");
     });
     init_state();
-
-    // Turn on lights for the livestream
-    $.get("/set_led_state", {new_state: "ON"});
-});
-
-$(window).bind('beforeunload', function() {
-  $.get("/set_led_state", {new_state: "OFF"});
 });
 
 function set_status_bar(elem, current_val, max_val) {
@@ -78,9 +65,6 @@ function init_state(){
         if (new_state.fridge_state === "1"){
             $("#cooling-badge").toggle();
         }
-        if (new_state.humidifier_state === "1"){
-            $("#rh-badge").toggle();
-        }
         if (new_state.fan_state === "1"){
             $("#fan-badge").toggle();
         }
@@ -103,15 +87,6 @@ function init_state(){
             $("#temp-ctl-on").removeClass("active");
             $("#temp-ctl-off-input").prop("checked", true);
         }
-        if (new_state.rh_control === "1"){
-            $("#rh-ctl-on").addClass("active");
-            $("#rh-ctl-off").removeClass("active");
-            $("#rh-ctl-on-input").prop("checked", true);
-        } else {
-            $("#rh-ctl-off").addClass("active");
-            $("#rh-ctl-on").removeClass("active");
-            $("#rh-ctl-off-input").prop("checked", true);
-        }
         if (new_state.fan_state === "1"){
             $("#fan-ctl-on").addClass("active");
             $("#fan-ctl-off").removeClass("active");
@@ -123,7 +98,6 @@ function init_state(){
         }
 
         $("#temp-setpoint-input").attr("placeholder", parseFloat(new_state.fridge_temp_setpoint).toFixed(1));
-        $("#rh-setpoint-input").attr("placeholder", parseFloat(new_state.fridge_rh_setpoint).toFixed(0));
 
         if (new_state.control_algorithm === "basic"){
             $("#control-alg-basic").addClass("active");
@@ -155,6 +129,6 @@ function init_state(){
             $("#manual-fridge-ctl-on").removeClass("active");
         }
         $("#temp-alarm-delta-input").attr("placeholder", parseFloat(new_state.temp_alarm_delta).toFixed(1));
-        $("#rh-alarm-delta-input").attr("placeholder", parseFloat(new_state.rh_alarm_delta).toFixed(0));
+        $("#rh-alarm-limit-input").attr("placeholder", parseFloat(new_state.rh_alarm_limit).toFixed(0));
     })
 }
