@@ -1,6 +1,6 @@
 """
 Meathook.py contains a class to interface with the meathook device itself.
-J.Zalger 2020
+J.Zalger 2022
 """
 import json
 import requests
@@ -26,8 +26,6 @@ class MeatHook(object):
         if self.is_online and init_state:
             self.get_state()
 
-        self.subscribed_events = ['state']
-        self.event_handlers = dict(state=self._handle_state_update)
         self.sse_stream_thread = threading.Thread(target=self._start_stream)
         self.start_stream()
 
@@ -62,7 +60,7 @@ class MeatHook(object):
 
     def get_state(self):
         print("Querying the device state")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as thread_pool:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as thread_pool:
             completed = thread_pool.map(self._get_variable, self.state_variables)
         new_state = {k: v for (k, v) in zip(MeatHook.state_variables, completed)}
         self.state.update(new_state)
@@ -135,8 +133,6 @@ class MeatHook(object):
             if r.status_code == requests.codes.ok:
                 return True
             else:
-                print("Call to %s failed with arg %s" % (func_name, arg))
-                print(r.content)
                 return False
         except requests.exceptions.RequestException:
             return False

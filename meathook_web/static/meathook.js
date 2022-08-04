@@ -30,6 +30,8 @@ $(document).ready(function(){
         button_function($("input[name='ctl-alg']:checked"), "/set-ctl-alg", "Error updating control algorithm");
     });
     init_state();
+    
+    // TODO: call init_state() every n seconds instead of reloading the whole page 
 });
 
 function set_status_bar(elem, current_val, max_val) {
