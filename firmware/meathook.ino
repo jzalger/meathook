@@ -109,26 +109,7 @@ void loop() {
 
     // Adjust system controls
     if (temp_control == TRUE) {
-        if (control_algorithm == "pid"){
-            temp_pid.Compute();
-            unsigned long now = millis();
-            if (now - pid_temp_window_start_time > pid_temp_window_size) {
-                pid_temp_window_start_time += pid_temp_window_size;
-            }
-            if (temp_pid_output > now - pid_temp_window_start_time){
-                start_fridge();
-            } else {
-                stop_fridge();
-            }
-
-        } else if (control_algorithm == "basic"){
-            bool action = basic_temp_control.compute_action();
-            if (action == TRUE){
-                start_fridge();
-            } else {
-                stop_fridge();
-            }
-        }
+        adjust_control();
     }
 
     if (fan_state == TRUE) {
@@ -138,40 +119,69 @@ void loop() {
     }
 
     // Trigger any system alarms
-    if (fridge_temp > temp_setpoint + temp_alarm_delta ||
-        fridge_temp < temp_setpoint - temp_alarm_delta) {
-            temp_alarm = TRUE;
-        } else {
-            temp_alarm = FALSE;
-        }
-    if (fridge_rh > rh_alarm_limit) {
-            rh_alarm = TRUE;
-        } else {
-            rh_alarm = FALSE;
-        }
+    handle_alarms();
 
     // Post readings to the cloud server
     if (stream_data == TRUE) {
         if ((millis() - last_stream_update) / 1000 > (stream_interval * 60)) {
-
-            state = "fridge_temp=" + String(fridge_temp) + "," +
-                "fridge_rh=" + String(fridge_rh) + "," +
-                "external_temp=" + String(external_temp) + "," +
-                "fridge_state=" + String(fridge_state)  + "," +
-                "fan_state=" + String(fan_state) + "," +
-                "door_state=" + String(door_state) + "," +
-                "temp_setpoint=" + String(temp_setpoint) + "," +
-                "temp_alarm=" + String(temp_alarm) + "," +
-                "rh_alarm=" + String(rh_alarm) + "," +
-                "control_alg=" + control_algorithm + "," +
-                "temp_alarm_delta=" + String(temp_alarm_delta) + "," +
-                "rh_alarm_limit=" + String(rh_alarm_limit) + "," +
-                "temp_control=" + String(temp_control);
-
-            Particle.publish("state", state);
-            last_stream_update = millis();
+            publish_state();
         }
     }
+}
+
+void adjust_control(){
+    if (control_algorithm == "pid"){
+        temp_pid.Compute();
+        unsigned long now = millis();
+        if (now - pid_temp_window_start_time > pid_temp_window_size) {
+            pid_temp_window_start_time += pid_temp_window_size;
+        }
+        if (temp_pid_output > now - pid_temp_window_start_time){
+            start_fridge();
+        } else {
+            stop_fridge();
+        }
+
+    } else if (control_algorithm == "basic"){
+        bool action = basic_temp_control.compute_action();
+        if (action == TRUE){
+            start_fridge();
+        } else {
+            stop_fridge();
+        }
+    }
+}
+
+void handle_alarms(){
+    if (fridge_temp > temp_setpoint + temp_alarm_delta ||
+            fridge_temp < temp_setpoint - temp_alarm_delta) {
+                temp_alarm = TRUE;
+    } else {
+        temp_alarm = FALSE;
+    }
+    if (fridge_rh > rh_alarm_limit) {
+        rh_alarm = TRUE;
+    } else {
+        rh_alarm = FALSE;
+    }
+}
+
+void publish_data() {
+    state = "fridge_temp=" + String(fridge_temp) + "," +
+            "fridge_rh=" + String(fridge_rh) + "," +
+            "external_temp=" + String(external_temp) + "," +
+            "fridge_state=" + String(fridge_state)  + "," +
+            "fan_state=" + String(fan_state) + "," +
+            "door_state=" + String(door_state) + "," +
+            "temp_setpoint=" + String(temp_setpoint) + "," +
+            "temp_alarm=" + String(temp_alarm) + "," +
+            "rh_alarm=" + String(rh_alarm) + "," +
+            "control_alg=" + control_algorithm + "," +
+            "temp_alarm_delta=" + String(temp_alarm_delta) + "," +
+            "rh_alarm_limit=" + String(rh_alarm_limit) + "," +
+            "temp_control=" + String(temp_control);
+    Particle.publish("state", state);
+    last_stream_update = millis();
 }
 
 void start_fridge(){
