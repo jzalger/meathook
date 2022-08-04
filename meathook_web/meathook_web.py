@@ -2,12 +2,12 @@ import os
 import importlib.util
 from flask import Flask, render_template, request, jsonify
 from meathook import MeatHook
-spec = importlib.util.spec_from_file_location("secrets", os.getenv("SECRETS_FILE"))
-secrets = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(secrets)
+spec = importlib.util.spec_from_file_location("mhconfig", os.getenv("MHCONFIG_FILE"))
+mhconfig = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mhconfig)
 
 meathook = Flask(__name__)
-device = MeatHook(secrets.device_id, secrets.particle_token)
+device = MeatHook(mhconfig.device_id, mhconfig.particle_token, api_config=mhconfig.api_config)
 
 
 @meathook.route('/')
@@ -38,12 +38,6 @@ def set_temp_control():
     return jsonify(device.set_temp_control(new_state))
 
 
-@meathook.route('/set-rh-ctl', methods=["GET"])
-def set_rh_control():
-    new_state = request.args.get("new_state")
-    return jsonify(device.set_rh_control(new_state))
-
-
 @meathook.route("/set-fan-state", methods=["GET"])
 def set_fan_state():
     new_state = request.args.get("new_state")
@@ -54,12 +48,6 @@ def set_fan_state():
 def set_temp_setpoint():
     new_state = request.args.get("new_state")
     return jsonify(device.set_temp_setpoint(new_state))
-
-
-@meathook.route("/set-humidity-setpoint", methods=["GET"])
-def set_rh_setpoint():
-    new_state = request.args.get("new_state")
-    return jsonify(device.set_rh_setpoint(new_state))
 
 
 @meathook.route("/set-ctl-alg", methods=["GET"])
@@ -77,14 +65,14 @@ def set_fridge_state():
 @meathook.route("/set-temp-alarm-point", methods=["GET"])
 def set_temp_alarm_threashold():
     new_state = request.args.get("new_state")
-    return jsonify(device.set_temp_alarm_setpoint(new_state))
+    return jsonify(device.set_temp_alarm_delta(new_state))
 
 
-@meathook.route("/set-rh-alarm-point", methods=["GET"])
-def set_rh_alarm_threashold():
+@meathook.route("/set-rh-alarm-limit", methods=["GET"])
+def set_rh_alarm_limit():
     new_state = request.args.get("new_state")
-    return jsonify(device.set_rh_alarm_setpoint(new_state))
+    return jsonify(device.set_rh_alarm_limit(new_state))
 
 
 if __name__ == '__main__':
-    meathook.run(debug=True, host=secrets.web_host)
+    meathook.run(debug=True, host=mhconfig.web_host)
