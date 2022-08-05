@@ -54,20 +54,20 @@ function button_function(elem, url, error_msg){
 function init_state(){
     $.get("/get-device-state").done(function(new_state) {
         // Alerts
-        if (new_state.temp_alarm === "1") {
+        if (new_state.temp_alarm === true) {
             $("#temp-alert-banner").show();
         }
-        if (new_state.rh_alarm === "1") {
+        if (new_state.rh_alarm === true) {
             $("#rh-alert-banner").show();
         }
-        if (new_state.door_state === "1") {
+        if (new_state.door_state === true) {
             $("#door-alert-banner").show();
         }
         // Current State
-        if (new_state.fridge_state === "1"){
+        if (new_state.fridge_state === true){
             $("#cooling-badge").toggle();
         }
-        if (new_state.fan_state === "1"){
+        if (new_state.fan_state === true){
             $("#fan-badge").toggle();
         }
 
@@ -80,7 +80,7 @@ function init_state(){
         $("#external-temp").text(parseFloat(new_state.external_temp).toFixed(1) + " ˚C");
         set_status_bar($("#external-temp"), parseFloat(new_state.external_temp), 45.0);
 
-        if (new_state.temp_control === "1"){
+        if (new_state.temp_control === true){
             $("#temp-ctl-on").addClass("active");
             $("#temp-ctl-off").removeClass("active");
             $("#temp-ctl-on-input").prop("checked", true);
@@ -89,7 +89,7 @@ function init_state(){
             $("#temp-ctl-on").removeClass("active");
             $("#temp-ctl-off-input").prop("checked", true);
         }
-        if (new_state.fan_state === "1"){
+        if (new_state.fan_state === true){
             $("#fan-ctl-on").addClass("active");
             $("#fan-ctl-off").removeClass("active");
             $("#fan-ctl-on-input").prop("checked", true);
@@ -121,7 +121,7 @@ function init_state(){
             $("#control-alg-basic").removeClass("active");
             $("#control-alg-learn").removeClass("active");
         }
-        if (new_state.fridge_state === "1"){
+        if (new_state.fridge_state === true){
             $("#manual-fridge-ctl-on").addClass("active");
             $("#manual-fridge-ctl-on-input").prop("checked", true);
             $("#manual-fridge-ctl-off").removeClass("active");

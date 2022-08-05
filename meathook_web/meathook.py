@@ -7,16 +7,17 @@ import requests
 import threading
 import concurrent.futures
 from sseclient import SSEClient
+from distutils.util import strtobool
 
 string_val_map = {"ON": "1", "OFF": "0"}
 
 
 class MeatHook(object):
     state_variables = ["fridge_temp", "fridge_rh", "external_temp", "fridge_state", "fan_state", "door_state",
-                       "temp_setpoint", "temp_alarm", "rh_alarm", "control_alg", "temp_alarm_delta",
+                       "fridge_temp_setpoint", "temp_alarm", "rh_alarm", "control_algorithm", "temp_alarm_delta",
                        "rh_alarm_limit", "temp_control"]
 
-    def __init__(self, device_id, token_id, api_config, init_state=True):
+    def __init__(self, device_id, token_id, api_config, init_state=False):
         self.device_id = device_id
         self.token_id = token_id
         self.api_config = api_config
@@ -47,6 +48,9 @@ class MeatHook(object):
             device_data_pairs = event_data['data'].split(",")
             device_data_pairs = [pair.split("=") for pair in device_data_pairs]
             device_data = {pair[0]: pair[1] for pair in device_data_pairs}
+            for variable, value in device_data.items():
+                if value == "True" or value == "False":
+                    device_data[variable] = bool(strtobool(value))
             self.state.update(device_data)
 
     def _get_variable(self, var):
