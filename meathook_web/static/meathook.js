@@ -30,8 +30,7 @@ $(document).ready(function(){
         button_function($("input[name='ctl-alg']:checked"), "/set-ctl-alg", "Error updating control algorithm");
     });
     init_state();
-    
-    // TODO: call init_state() every n seconds instead of reloading the whole page 
+    setInterval(init_state, 10000);
 });
 
 function set_status_bar(elem, current_val, max_val) {
@@ -132,5 +131,9 @@ function init_state(){
         }
         $("#temp-alarm-delta-input").attr("placeholder", parseFloat(new_state.temp_alarm_delta).toFixed(1));
         $("#rh-alarm-limit-input").attr("placeholder", parseFloat(new_state.rh_alarm_limit).toFixed(0));
+
+        if (Object.entries(new_state).length > 0){
+            $("#disconnected-badge").hide();
+        }
     })
 }
