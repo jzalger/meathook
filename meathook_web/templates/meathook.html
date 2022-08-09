@@ -3,69 +3,66 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <!-- Bootstrap CSS
-    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
-          -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
-    <link href="{{ url_for('static', filename='meathook.css') }}" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='meathook.css') }}">
 
-    <script crossorigin="anonymous" src="https://kit.fontawesome.com/04d344c588.js"></script>
+    <script src="https://kit.fontawesome.com/04d344c588.js" crossorigin="anonymous"></script>
     <title>Meat Hook</title>
 </head>
 
 <body>
 <div class="alert alert-danger" id="general-error-banner" role="alert"></div>
 <div class="alert alert-danger" id="temp-alert-banner" role="alert">
-    <em class="fas fa-thermometer-half"></em> Temperature Alert!
+    <i class="fas fa-thermometer-half"></i> Temperature Alert!
 </div>
 
 <div class="alert alert-danger" id="rh-alert-banner" role="alert">
-    <em class="fas fa-tint"></em> Humidity Alert!
+    <i class="fas fa-tint"></i> Humidity Alert!
 </div>
 
 <div class="alert alert-warning" id="door-alert-banner" role="alert">
-    <em class="fas fa-door-open"></em> Door Open!
+    <i class="fas fa-door-open"></i> Door Open!
 </div>
 
 <div class="container">
     <div class="row main-row justify-content-center">
-        <h1 class="display-4"><em class="fas fa-utensils"></em> Meat Hook</h1>
+        <h1 class="display-4"><i class="fas fa-utensils"></i> Meat Hook</h1>
     </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card">
+            <div class="card bg-light">
                 <div class="card-header">
                     Current Status
 
-                    <span class="badge badge-primary" id="cooling-badge">COOLING</span>
-                    <span class="badge badge-secondary" id="fan-badge">FAN ON</span>
-                    <span class="badge badge-danger" id="disconnected-badge">DISCONNECTED</span>
+                    <span id="cooling-badge" class="badge badge-primary">COOLING</span>
+                    <span id="fan-badge" class="badge badge-secondary">FAN ON</span>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <em class="fas fa-thermometer-half"></em> Fridge Temperature
+                        <i class="fas fa-thermometer-half"></i> Fridge Temperature
                         <div class="progress progress-large">
-                            <div aria-valuemax="20" aria-valuemin="0" aria-valuenow="8" class="progress-bar progress-bar-striped bg-primary" id="fridge-temp"
-                                 role="progressbar" style="width: 25%"> ˚C
+                            <div id="fridge-temp" class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 25%" aria-valuenow="8"
+                                 aria-valuemin="0" aria-valuemax="20"> ˚C
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
-                        <em class="fas fa-tint"></em> Fridge Humidity
+                        <i class="fas fa-tint"></i> Fridge Humidity
                         <div class="progress progress-large">
-                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="48" class="progress-bar progress-bar-striped bg-success"
-                                 id="fridge-rh" role="progressbar" style="width: 48%"> %
+                            <div id="fridge-rh" class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 48%"
+                                 aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"> %
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
-                        <em class="fas fa-thermometer-half"></em> External Temperature
+                        <i class="fas fa-thermometer-half"></i> External Temperature
                         <div class="progress progress-large">
-                            <div aria-valuemax="40" aria-valuemin="0" aria-valuenow="30" class="progress-bar progress-bar-striped bg-warning"
-                                 id="external-temp"
-                                 role="progressbar" style="width: 75%"> ˚C
+                            <div id="external-temp" class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%"
+                                 aria-valuenow="30"
+                                 aria-valuemin="0" aria-valuemax="40"> ˚C
                             </div>
                         </div>
                     </li>
@@ -75,7 +72,7 @@
     </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card">
+            <div class="card bg-light">
                 <div class="card-header">
                     Controls
                 </div>
@@ -83,15 +80,15 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
-                                <em class="fas fa-thermometer-half"></em> Automatic Temperature
+                                <i class="fas fa-thermometer-half"></i> Automatic Temperature
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-success btn-sm " id="temp-ctl-on">
-                                        <input autocomplete="off" id="temp-ctl-on-input" name="auto-temp" type="radio" value="ON">ON
+                                    <label id="temp-ctl-on" class="btn btn-outline-success btn-sm ">
+                                        <input id="temp-ctl-on-input" type="radio" name="auto-temp" value="ON" autocomplete="off">ON
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm" id="temp-ctl-off">
-                                        <input autocomplete="off" id="temp-ctl-off-input" name="auto-temp" type="radio" value="OFF">OFF
+                                    <label id="temp-ctl-off" class="btn btn-outline-secondary btn-sm">
+                                        <input id="temp-ctl-off-input" type="radio" name="auto-temp" value="OFF" autocomplete="off">OFF
                                     </label>
                                 </div>
                             </div>
@@ -100,15 +97,15 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
-                                <em class="fas fa-fan"></em> Fan
+                                <i class="fas fa-fan"></i> Fan
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-success btn-sm" id="fan-ctl-on">
-                                        <input autocomplete="off" id="fan-ctl-on-input" name="fan-state" type="radio" value="ON" >ON
+                                    <label id="fan-ctl-on" class="btn btn-outline-success btn-sm">
+                                        <input id="fan-ctl-on-input" type="radio" name="fan-state" value="ON" autocomplete="off" >ON
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm" id="fan-ctl-off">
-                                        <input autocomplete="off" id="fan-ctl-off-input" name="fan-state" type="radio" value="OFF">OFF
+                                    <label id="fan-ctl-off" class="btn btn-outline-secondary btn-sm">
+                                        <input id="fan-ctl-off-input" type="radio" name="fan-state" value="OFF" autocomplete="off">OFF
                                     </label>
                                 </div>
                             </div>
@@ -117,11 +114,11 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
-                                <em class="fas fa-thermometer-half"></em> Temperature Setpoint
+                                <i class="fas fa-thermometer-half"></i> Temperature Setpoint
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input aria-label="degrees celcius" class="form-control" id="temp-setpoint-input" placeholder="Loading" type="text">
+                                    <input placeholder="Loading" id="temp-setpoint-input" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
                                         <button class="btn btn-outline-primary btn-sm" id="temp-setpoint" type="button">Set</button>
@@ -137,7 +134,7 @@
 
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card">
+            <div class="card bg-light">
                 <div class="card-header">
                     Energy Saving
                 </div>
@@ -145,15 +142,15 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
-                                <em class="fas fa-dollar-sign"></em> Enable
+                                <i class="fas fa-dollar-sign"></i> Enable
                             </div>
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-success btn-sm" id="energy-saving-on">
-                                        <input autocomplete="off" id="energy-saving-on-input" name="es-state" type="radio" value="ON" >ON
+                                    <label id="energy-saving-on" class="btn btn-outline-success btn-sm">
+                                        <input id="energy-saving-on-input" type="radio" name="fan-state" value="ON" autocomplete="off" >ON
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm" id="energy-saving-off">
-                                        <input autocomplete="off" id="energy-saving-off-input" name="es-state" type="radio" value="OFF">OFF
+                                    <label id="energy-saving-off" class="btn btn-outline-secondary btn-sm">
+                                        <input id="energy-saving-off-input" type="radio" name="fan-state" value="OFF" autocomplete="off">OFF
                                     </label>
                                 </div>
                             </div>
@@ -162,37 +159,13 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
-                                <em class="fas fa-thermometer-half"></em> Activate between
-                            </div>
-                            <div class="col-6">
-                                <div class="input-group input-group-sm mb-3">
-                                    <input style="max-width:70px" aria-label="hours" class="form-control" id="overnight-time1-input"
-                                           placeholder="22:00"
-                                           type="text">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">and</span>
-                                            <input style="max-width:70px" aria-label="hours" class="form-control" id="overnight-time2-input"
-                                            placeholder="10:00"
-                                            type="text">
-                                        <button class="btn btn-outline-primary btn-sm" id="overnight-time-btn"
-                                                type="button">
-                                            Set
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-6">
-                                <em class="fas fa-thermometer-half"></em> Overnight Temperature
+                                <i class="fas fa-thermometer-half"></i> Overnight Temperature
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input aria-label="degrees celcius" class="form-control" id="overnight-temp-input"
-                                           placeholder="10.0"
-                                           type="text">
+                                    <input id="overnight-temp-input" placeholder="Loading" type="text"
+                                           class="form-control"
+                                           aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
                                         <button class="btn btn-outline-primary btn-sm" id="overnight-temp-btn"
@@ -210,7 +183,7 @@
     </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card">
+            <div class="card bg-light">
                 <div class="card-header">
                     More Controls
                 </div>
@@ -218,18 +191,18 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
-                                <em class="fas fa-microchip"></em> Control Algorithm
+                                <i class="fas fa-microchip"></i> Control Algorithm
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-secondary btn-sm" id="control-alg-basic">
-                                        <input autocomplete="off" id="control-alg-basic-input" name="ctl-alg" type="radio" value="basic" > Basic
+                                    <label id="control-alg-basic" class="btn btn-outline-secondary btn-sm">
+                                        <input id="control-alg-basic-input" value="basic" type="radio" name="ctl-alg" autocomplete="off" > Basic
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm" id="control-alg-pid">
-                                        <input autocomplete="off" class="disabled" id="control-alg-pid-input" name="ctl-alg" type="radio" value="pid"> PID
+                                    <label id="control-alg-pid" class="btn btn-outline-secondary btn-sm">
+                                        <input id="control-alg-pid-input" value="pid" type="radio" name="ctl-alg" autocomplete="off"> PID
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm" id="control-alg-learn">
-                                        <input autocomplete="off" class="disabled" id="control-alg-learn-input" name="ctl-alg" type="radio" value="learn"> Learning
+                                    <label id="control-alg-learn" class="btn btn-outline-secondary btn-sm">
+                                        <input id="control-alg-learn-input" value="learn" type="radio" name="ctl-alg" autocomplete="off"> Learning
                                     </label>
                                 </div>
                             </div>
@@ -238,15 +211,15 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
-                                <em class="fas fa-thermometer-empty"></em> Manual Fridge Control
+                                <i class="fas fa-thermometer-empty"></i> Manual Fridge Control
                             </div>
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label class="btn btn-outline-success btn-sm " id="manual-fridge-ctl-on">
-                                        <input autocomplete="off" id="manual-fridge-ctl-on-input" name="fridge-state" type="radio" value="ON"> ON
+                                    <label id="manual-fridge-ctl-on" class="btn btn-outline-success btn-sm ">
+                                        <input id="manual-fridge-ctl-on-input" value="ON" type="radio" name="fridge-state" autocomplete="off"> ON
                                     </label>
-                                    <label class="btn btn-outline-secondary btn-sm" id="manual-fridge-ctl-off">
-                                        <input autocomplete="off" id="manual-fridge-ctl-off-input" name="fridge-state" type="radio" value="OFF"> OFF
+                                    <label id="manual-fridge-ctl-off" class="btn btn-outline-secondary btn-sm">
+                                        <input id="manual-fridge-ctl-off-input" value="OFF" type="radio" name="fridge-state" autocomplete="off"> OFF
                                     </label>
                                 </div>
                             </div>
@@ -255,11 +228,11 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
-                                <em class="far fa-bell"></em> Temperature Alarm Threashold
+                                <i class="far fa-bell"></i> Temperature Alarm Threashold
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input aria-label="degrees celcius" class="form-control" id="temp-alarm-delta-input" placeholder="Loading" type="text">
+                                    <input id="temp-alarm-delta-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
                                         <button class="btn btn-outline-primary btn-sm" id="temp-alarm-delta-set" type="button">Set</button>
@@ -271,11 +244,11 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-6">
-                                <em class="far fa-bell"></em> Humidity Alarm Threadshold
+                                <i class="far fa-bell"></i> Humidity Alarm Threadshold
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input aria-label="degrees celcius" class="form-control" id="rh-alarm-limit-input" placeholder="Loading" type="text">
+                                    <input id="rh-alarm-limit-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
                                         <button class="btn btn-outline-primary btn-sm" id="rh-alarm-limit-set" type="button">Set</button>
@@ -292,14 +265,14 @@
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script crossorigin="anonymous"
-        src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script crossorigin="anonymous"
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script crossorigin="anonymous"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        crossorigin="anonymous"></script>
 <script src="{{ url_for('static', filename='meathook.js') }}"></script>
 </body>
 </html>
