@@ -29,6 +29,15 @@ $(document).ready(function(){
     $("input[name='ctl-alg']").on("change", function(){
         button_function($("input[name='ctl-alg']:checked"), "/set-ctl-alg", "Error updating control algorithm");
     });
+    $("input[name='es-state']").on("change", function(){
+        button_function($("input[name='es-state']:checked"), "/set-es-state", "Error updating energy saving state");
+    });
+    $("#overnight-temp-btn").button().click(function(){
+        button_function($("#overnight-temp-input"), "/set-es-temp-setpoint", "Error updating energy saving setpoint");
+    });
+    $("#overnight-time-btn").button().click(function(){
+        set_es_time({"es_start_string":$("overnight-time1-input").val(), "es_Stop_string":$("overnight-time2-input").val()}, "/set-es-timing", "Error updating es-timing");
+    });
     init_state();
     setInterval(init_state, 10000);
 });
@@ -36,11 +45,21 @@ $(document).ready(function(){
 function set_status_bar(elem, current_val, max_val) {
     var percent = current_val / max_val * 100;
     $(elem).css("width", percent + "%");
-}
-
+};
 function button_function(elem, url, error_msg){
     var new_val = $(elem).val();
     var args = {new_state: new_val};
+    $.get( url, args )
+    .done(function(result) {
+        if (result === false) {
+            $("#general-error-banner").text(error_msg);
+            $("#general-error-banner").show();
+        }
+    })
+};
+function set_es_time(times_dict, url, error_msg) {
+    var new_values = times_dict;
+    var args = {new_state: new_values};
     $.get( url, args )
     .done(function(result) {
         if (result === false) {
@@ -98,7 +117,20 @@ function init_state(){
             $("#fan-ctl-off-input").prop("checked", true);
         }
 
-        $("#temp-setpoint-input").attr("placeholder", parseFloat(new_state.fridge_temp_setpoint).toFixed(1));
+        $("#temp-setpoint-input").attr("placeholder", parseFloat(new_state.temp_setpoint).toFixed(1));
+
+        if (new_state.es_state === true){
+            $("#energy-saving-on").addClass("active");
+            $("#energy-saving-off").removeClass("active");
+            $("##energy-saving-on-input").prop("checked", true);
+        } else {
+            $("#energy-saving-off").addClass("active");
+            $("#energy-saving-on").removeClass("active");
+            $("#energy-saving-off-input").prop("checked", true);
+        }
+        $("#overnight-temp-input").attr("placeholder", parseFloat(new_state.es_temp_setpoint).toFixed(1));
+        $("#overnight-time1-input").attr("placeholder", new_state.es_start);
+        $("#overnight-time2-input").attr("placeholder", new_state.es_stop);
 
         if (new_state.control_algorithm === "basic"){
             $("#control-alg-basic").addClass("active");

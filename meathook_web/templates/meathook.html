@@ -4,9 +4,11 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS
     <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" rel="stylesheet">
+          -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
     <link href="{{ url_for('static', filename='meathook.css') }}" rel="stylesheet" type="text/css">
 
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/04d344c588.js"></script>
@@ -33,7 +35,7 @@
     </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card bg-light">
+            <div class="card">
                 <div class="card-header">
                     Current Status
 
@@ -41,7 +43,7 @@
                     <span class="badge badge-secondary" id="fan-badge">FAN ON</span>
                     <span class="badge badge-danger" id="disconnected-badge">DISCONNECTED</span>
                 </div>
-                <ul class="list-group list-group-flush"> 
+                <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <em class="fas fa-thermometer-half"></em> Fridge Temperature
                         <div class="progress progress-large">
@@ -73,7 +75,7 @@
     </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card bg-light">
+            <div class="card">
                 <div class="card-header">
                     Controls
                 </div>
@@ -135,7 +137,7 @@
 
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card bg-light">
+            <div class="card">
                 <div class="card-header">
                     Energy Saving
                 </div>
@@ -148,10 +150,10 @@
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-success btn-sm" id="energy-saving-on">
-                                        <input autocomplete="off" id="energy-saving-on-input" name="fan-state" type="radio" value="ON" >ON
+                                        <input autocomplete="off" id="energy-saving-on-input" name="es-state" type="radio" value="ON" >ON
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm" id="energy-saving-off">
-                                        <input autocomplete="off" id="energy-saving-off-input" name="fan-state" type="radio" value="OFF">OFF
+                                        <input autocomplete="off" id="energy-saving-off-input" name="es-state" type="radio" value="OFF">OFF
                                     </label>
                                 </div>
                             </div>
@@ -208,7 +210,7 @@
     </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card bg-light">
+            <div class="card">
                 <div class="card-header">
                     More Controls
                 </div>

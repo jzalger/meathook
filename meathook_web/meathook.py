@@ -14,8 +14,9 @@ string_val_map = {"ON": "1", "OFF": "0"}
 
 class MeatHook(object):
     state_variables = ["fridge_temp", "fridge_rh", "external_temp", "fridge_state", "fan_state", "door_state",
-                       "fridge_temp_setpoint", "temp_alarm", "rh_alarm", "control_algorithm", "temp_alarm_delta",
-                       "rh_alarm_limit", "temp_control"]
+                       "temp_setpoint", "temp_alarm", "rh_alarm", "control_algorithm", "temp_alarm_delta",
+                       "rh_alarm_limit", "temp_control", "es_state", "es_temp_setpoint", "es_start", "es_stop",
+                       "current_temp_setpoint"]
 
     def __init__(self, device_id, token_id, api_config, init_state=False):
         self.device_id = device_id
@@ -126,6 +127,29 @@ class MeatHook(object):
             if success:
                 self.state['control_algorithm'] = new_alg
             return success
+        else:
+            return False
+
+    def set_es_state(self, new_state):
+        success = self._call_func("es_state", new_state)
+        if success:
+            self.state['es_state'] = new_state
+        return success
+
+    def set_es_temp_setpoint(self, new_state):
+        success = self._call_func("es_temp_setpoint", new_state)
+        if success:
+            self.state['es_temp_setpoint'] = new_state
+        return success
+
+    def set_es_timing(self, new_state):
+        # new state must contain both es_start_string and es_end_string as a dict.
+        start_success = self._call_func("es_start", new_state['es_start_string'])
+        end_success = self._call_func("es_stop", new_state['es_end_string'])
+        if start_success and end_success:
+            self.state['es_start_string'] = new_state['es_start_string']
+            self.state['es_stop_string'] = new_state['es_stop_string']
+            return True
         else:
             return False
 

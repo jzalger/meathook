@@ -74,5 +74,23 @@ def set_rh_alarm_limit():
     return jsonify(device.set_rh_alarm_limit(new_state))
 
 
+@meathook.route("/set-es-state", methods=["GET"])
+def set_es_state():
+    new_state = request.args.get("new_state")
+    return jsonify(device.set_es_state(new_state))
+
+
+@meathook.route("/set-es-temp-setpoint", methods=["GET"])
+def set_es_temp_setpoint():
+    new_state = request.args.get("new_state")
+    return jsonify(device.set_es_temp_setpoint(new_state))
+
+
+@meathook.route("/set-es-timing", methods=["GET"])
+def set_es_timing():
+    new_state = request.args.get("new_state")
+    return jsonify(device.set_es_timing(new_state))
+
+
 if __name__ == '__main__':
     meathook.run(debug=True, host=mhconfig.web_host)
