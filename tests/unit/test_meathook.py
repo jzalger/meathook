@@ -8,8 +8,9 @@ from unittest import TestCase, skip, mock
 
 class TestMeathook(TestCase):
 
+    @skip("Not implemented")
     def test_init(self):
-        self.assertEqual(, )
+        pass
 
     def test_start_stream(self):
         pass
