@@ -5,10 +5,12 @@ from meathook_web.meathook import MeatHook
 from meathook_web import meathook_web
 from mhconfig_template import api_config
 
-@pytest.fixture
-def app():
+@pytest.fixture(scope="module")
+def test_client():
     app = meathook_web.meathook
-    return app
+    with app.test_client() as testing_client:
+        with app.app_context():
+            yield testing_client
 
 @pytest.fixture
 def device():

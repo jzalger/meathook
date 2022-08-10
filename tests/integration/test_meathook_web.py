@@ -5,11 +5,16 @@ import pytest
 from mhconfig_template import api_config
 
 
-def test_main():
-    pytest.skip("To be implemented")
+def test_main(test_client):
+    response = test_client.get("/")
+    assert response.status_code == 200
+    assert b"Meat Hook" in response.data
+
     
-def test_get_device_state():
-    pytest.skip("To be implemented")
+def test_get_device_state(test_client):
+    response = test_client.get("/get-device-state")
+    assert response.status_code == 200
+    assert b'{}\n' in response.data
 
 def test_get_var_state():
     pytest.skip("To be implemented")
