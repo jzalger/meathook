@@ -145,7 +145,7 @@ class MeatHook(object):
     def set_es_timing(self, new_state):
         # new state must contain both es_start_string and es_end_string as a dict.
         start_success = self._call_func("es_start", new_state['es_start_string'])
-        end_success = self._call_func("es_stop", new_state['es_end_string'])
+        end_success = self._call_func("es_stop", new_state['es_stop_string'])
         if start_success and end_success:
             self.state['es_start_string'] = new_state['es_start_string']
             self.state['es_stop_string'] = new_state['es_stop_string']

@@ -1,4 +1,5 @@
 import os
+import simplejson as json
 import importlib.util
 from flask import Flask, render_template, request, jsonify
 from meathook import MeatHook
@@ -88,7 +89,7 @@ def set_es_temp_setpoint():
 
 @meathook.route("/set-es-timing", methods=["GET"])
 def set_es_timing():
-    new_state = request.args.get("new_state")
+    new_state = json.loads(request.args.get("new_state"))
     return jsonify(device.set_es_timing(new_state))
 
 
