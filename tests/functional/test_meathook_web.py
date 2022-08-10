@@ -1,10 +1,9 @@
 """
 Unit Tests for meathook_web.py
 """
-from unittest import TestCase, skip, mock
+import meathook_web.meathook_web
 
-
-class TestMeathookWeb(TestCase):
+class TestMeathookWeb:
 
     def test_main(self):
         pass

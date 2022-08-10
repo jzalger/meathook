@@ -1,14 +1,10 @@
 """
 Unit Tests for meathook.py
 """
-import tempfile
-import meathook
-from unittest import TestCase, skip, mock
+import meathook_web.meathook
 
+class TestMeathook:
 
-class TestMeathook(TestCase):
-
-    @skip("Not implemented")
     def test_init(self):
         pass
 
