@@ -36,7 +36,7 @@ $(document).ready(function(){
         button_function($("#overnight-temp-input"), "/set-es-temp-setpoint", "Error updating energy saving setpoint");
     });
     $("#overnight-time-btn").button().click(function(){
-        button_function({"es_start_string":$("overnight-time1-input").val(), "es_Stop_string":$("overnight-time2-input").val()}, "/set-es-timing", "Error updating es-timing");
+        set_es_time({"es_start_string":$("#overnight-time1-input").val(), "es_Stop_string":$("#overnight-time2-input").val()}, "/set-es-timing", "Error updating es-timing");
     });
     init_state();
     setInterval(init_state, 10000);
@@ -49,6 +49,15 @@ function set_status_bar(elem, current_val, max_val) {
 function button_function(elem, url, error_msg){
     let new_val = $(elem).val();
     let args = {new_state: new_val};
+    call_func(url, args);
+}
+function set_es_time(times_dict, url, error_msg) {
+    let new_values = times_dict;
+    let args = {new_state: new_values};
+    call_func(url, args);
+}
+
+function call_func(data, url, error_msg){
     $.get( url, args )
     .done(function(result) {
         if (result === false) {
@@ -57,19 +66,6 @@ function button_function(elem, url, error_msg){
         }
     })
 }
-
-/* function set_es_time(times_dict, url, error_msg) {
-    let new_values = times_dict;
-    let args = {new_state: new_values};
-    $.get( url, args )
-    .done(function(result) {
-        if (result === false) {
-            $("#general-error-banner").text(error_msg);
-            $("#general-error-banner").show();
-        }
-    })
-} */
-
 function init_state(){
     $.get("/get-device-state").done(function(new_state) {
         // Alerts
@@ -123,7 +119,7 @@ function init_state(){
         if (new_state.es_state === true){
             $("#energy-saving-on").addClass("active");
             $("#energy-saving-off").removeClass("active");
-            $("##energy-saving-on-input").prop("checked", true);
+            $("#energy-saving-on-input").prop("checked", true);
         } else {
             $("#energy-saving-off").addClass("active");
             $("#energy-saving-on").removeClass("active");

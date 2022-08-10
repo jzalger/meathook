@@ -116,9 +116,9 @@ class MeatHook(object):
         return success
 
     def set_rh_alarm_limit(self, new_state):
-        success = self._call_func("set_rh_alarm_delta", new_state)
+        success = self._call_func("set_rh_alarm_limit", new_state)
         if success:
-            self.state['rh_alarm_delta'] = new_state
+            self.state['rh_alarm_limit'] = new_state
         return success
 
     def set_control_alg(self, new_alg):
