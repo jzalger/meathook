@@ -1,4 +1,9 @@
 # Meat Hook
+![CI](https://github.com/jzalger/meathook/workflows/CI/badge.svg?branch=dev)
+![GitHub](https://img.shields.io/github/license/jzalger/meathook)
+![GitHub Pipenv locked Python version (branch)](https://img.shields.io/github/pipenv/locked/python-version/jzalger/meathook/master)
+[![codecov](https://codecov.io/gh/jzalger/meathook/branch/master/graph/badge.svg)](https://codecov.io/gh/jzalger/meathook)
+
 Meat Hook is a temperature and humidity controlled fridge for dry aging meat.
 This project goes through designing the circuit and PCB as well as the surrounding full-stack web application and data 
 logging utilities. It also explores using various control algorithms including basic, PID, and machine learning approaches.

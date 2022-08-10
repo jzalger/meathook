@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master", "dev" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  pull-requests: read 
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Build the Docker image
+      uses: docker/build-push-action@v3.1.0
+      with:
+        context: .
+        push: false
+        tags: jzalger/meathook:latest
+
+    - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          pipenv run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          pipenv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Test with pytest and coverage
+        run: |
+          pipenv run pytest --cov=meathook --cov-report xml tests/unit/test_meathook.py
+      - name: Codecov
+        uses: codecov/codecov-action@v1.0.10
+
+  Analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Analyze with SonarCloud         
+
+        uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   
+        with:
+          args:             
+            -Dsonar.projectKey=jzalger_meathook
+            -Dsonar.organization=jzalger
