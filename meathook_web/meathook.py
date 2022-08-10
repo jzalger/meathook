@@ -1,109 +1,94 @@
 """
 Meathook.py contains a class to interface with the meathook device itself.
-J.Zalger 2020
+J.Zalger 2022
 """
 import json
 import requests
 import threading
-from string import Template
+import concurrent.futures
 from sseclient import SSEClient
+from distutils.util import strtobool
 
 string_val_map = {"ON": "1", "OFF": "0"}
 
 
-class MeatHook:
+class MeatHook(object):
+    state_variables = ["fridge_temp", "fridge_rh", "external_temp", "fridge_state", "fan_state", "door_state",
+                       "temp_setpoint", "temp_alarm", "rh_alarm", "control_algorithm", "temp_alarm_delta",
+                       "rh_alarm_limit", "temp_control", "es_state", "es_temp_setpoint", "es_start", "es_stop",
+                       "current_temp_setpoint"]
 
-    main_state_mapping = ["fridge_temp", "fridge_rh", "external_temp",
-                          "fridge_state", "humidifier_state", "fan_state", "door_state"]
-    aux_state_mapping = ["fridge_temp_setpoint", "fridge_rh_setpoint", "temp_alarm", "rh_alarm",
-                         "control_algorithm", "temp_alarm_delta", "rh_alarm_delta", "temp_control", "rh_control"]
-
-    variables = main_state_mapping + aux_state_mapping
-    events = []
-
-    api_get_url = Template("https://api.particle.io/v1/devices/$device_id/$var_name")
-    api_func_url = Template("https://api.particle.io/v1/devices/$device_id/$func_name")
-    api_vitals_url = Template("https://api.particle.io/v1/diagnostics/$device_id/last")
-    api_sse_url = Template("https://api.spark.io/v1/events/$event?access_token=$token")
-
-    def __init__(self, device_id, token_id):
+    def __init__(self, device_id, token_id, api_config, init_state=False):
         self.device_id = device_id
         self.token_id = token_id
-        self.state = None
-
-        # SSE Callback Functions to be assigned by consumer
-        self.temp_alarm_callback = None
-        self.rh_alarm_callback = None
-        self.door_alarm_callback = None
+        self.api_config = api_config
+        self.state = dict()
 
         # Initialize the device state, then subscribe to the feed.
-        self.state = self._get_state()
+        if self.is_online and init_state:
+            self.get_state()
 
-        # Instead of the Web UI polling the device actively, which could result in rate limiting,
-        # the object will listen to the status stream and cache the results to return to the client
-        _t1 = threading.Thread(target=self._subscribe_to_event, args=("main_state", self._update_main_state)).start()
-        _t2 = threading.Thread(target=self._subscribe_to_event, args=("aux_state", self._update_aux_state)).start()
-        _t3 = threading.Thread(target=self._subscribe_to_event, args=("temp_alarm", self._handle_temp_alarm)).start()
-        _t4 = threading.Thread(target=self._subscribe_to_event, args=("rh_alarm", self._handle_rh_alarm)).start()
+        self.sse_stream_thread = threading.Thread(target=self._start_stream)
+        self.start_stream()
+
+    def start_stream(self):
+        self.sse_stream_thread.start()
+
+    def stop_stream(self):
+        self.sse_stream_thread.join(timeout=1)
+
+    def _start_stream(self):
+        stream = SSEClient(self.api_config["sse_url"].substitute(dict(device_id=self.device_id, token=self.token_id)))
+        for event in stream:
+            if event.data != "":
+                self._handle_state_update(event)
+
+    def _handle_state_update(self, event):
+        event_data = json.loads(event.data)
+        if event_data['coreid'] == self.device_id:
+            device_data_pairs = event_data['data'].split(",")
+            device_data_pairs = [pair.split("=") for pair in device_data_pairs]
+            device_data = {pair[0]: pair[1] for pair in device_data_pairs}
+            for variable, value in device_data.items():
+                if value == "True" or value == "False":
+                    device_data[variable] = bool(strtobool(value))
+            self.state.update(device_data)
 
     def _get_variable(self, var):
         """Returns the current device state as a JSON formatted string"""
-        val = None
-        if var not in MeatHook.variables:
-            return dict()
-        try:
-            r = requests.get(MeatHook.api_get_url.substitute(dict(device_id=self.device_id, var_name=var)),
-                             params=dict(access_token=self.token_id))
-            if r.status_code == requests.codes.ok:
-                val = dict(r.json())["result"]
-                if val is True:
-                    val = "1"
-                elif val is False:
-                    val = "0"
-            else:
-                raise requests.exceptions.RequestException
-        except requests.exceptions.RequestException:
-            pass
-        return val
+        r = requests.get(self.api_config["get_url"].substitute(dict(device_id=self.device_id, var_name=var)),
+                         params=dict(access_token=self.token_id))
+        if r.status_code == requests.codes.ok:
+            return r.json()["result"]
+        else:
+            return None
 
-    def _get_state(self):
-        print("Querying the device state. Will take ~15s")
-        state = dict()
-        for var in MeatHook.variables:
-            state[var] = self._get_variable(var)
-        return state
-
-    # Event handlers
-    def _update_main_state(self, msg):
-        s = msg['data'].split(',')
-        self.state.update({k: v for (k, v) in zip(MeatHook.main_state_mapping, s)})
-
-    def _update_aux_state(self, msg):
-        s = msg['data'].split(',')
-        self.state.update({k: v for (k, v) in zip(MeatHook.aux_state_mapping, s)})
-
-    def _handle_temp_alarm(self, msg):
-        s = msg['data']
-        self.state['temp_alarm'] = "1"
-
-    def _handle_rh_alarm(self, msg):
-        s = msg['data']
-        self.state['rh_alarm'] = "1"
+    def get_state(self):
+        print("Querying the device state")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as thread_pool:
+            completed = thread_pool.map(self._get_variable, self.state_variables)
+        new_state = {k: v for (k, v) in zip(MeatHook.state_variables, completed)}
+        self.state.update(new_state)
 
     @property
-    def device_health(self):
-        return dict()
+    def is_online(self):
+        url = self.api_config["ping_url"].substitute(dict(device_id=self.device_id))
+        response = requests.put(url, data={'access_token': self.token_id})
+        if response.status_code == requests.codes.ok:
+            return response.json()["online"]
+        else:
+            return False
+
+    def set_led_state(self, new_light_state):
+        success = self._call_func("set_led_state", new_light_state)
+        if success:
+            self.state['led_state'] = new_light_state
+        return success
 
     def set_temp_setpoint(self, new_setpoint):
         success = self._call_func("set_temp_setpoint", new_setpoint)
         if success:
             self.state['fridge_temp_setpoint'] = new_setpoint
-        return success
-
-    def set_rh_setpoint(self, new_setpoint):
-        success = self._call_func("set_rh_setpoint", new_setpoint)
-        if success:
-            self.state["fridge_rh_setpoint"] = new_setpoint
         return success
 
     def set_fan_state(self, new_state):
@@ -124,19 +109,13 @@ class MeatHook:
             self.state['temp_control'] = string_val_map[new_state]
         return success
 
-    def set_rh_control(self, new_state):
-        success = self._call_func("set_rh_control", new_state)
-        if success:
-            self.state['rh_control'] = string_val_map[new_state]
-        return success
-
-    def set_temp_alarm_setpoint(self, new_state):
+    def set_temp_alarm_delta(self, new_state):
         success = self._call_func("set_temp_alarm_delta", new_state)
         if success:
             self.state['temp_alarm_delta'] = new_state
         return success
 
-    def set_rh_alarm_setpoint(self, new_state):
+    def set_rh_alarm_limit(self, new_state):
         success = self._call_func("set_rh_alarm_delta", new_state)
         if success:
             self.state['rh_alarm_delta'] = new_state
@@ -151,22 +130,37 @@ class MeatHook:
         else:
             return False
 
+    def set_es_state(self, new_state):
+        success = self._call_func("es_state", new_state)
+        if success:
+            self.state['es_state'] = new_state
+        return success
+
+    def set_es_temp_setpoint(self, new_state):
+        success = self._call_func("es_temp_setpoint", new_state)
+        if success:
+            self.state['es_temp_setpoint'] = new_state
+        return success
+
+    def set_es_timing(self, new_state):
+        # new state must contain both es_start_string and es_end_string as a dict.
+        start_success = self._call_func("es_start", new_state['es_start_string'])
+        end_success = self._call_func("es_stop", new_state['es_end_string'])
+        if start_success and end_success:
+            self.state['es_start_string'] = new_state['es_start_string']
+            self.state['es_stop_string'] = new_state['es_stop_string']
+            return True
+        else:
+            return False
+
     def _call_func(self, func_name, arg):
         try:
-            r = requests.post(MeatHook.api_func_url.substitute(
+            r = requests.post(self.api_config["func_url"].substitute(
                 dict(device_id=self.device_id, func_name=func_name)),
                 data=dict(args=str(arg), access_token=self.token_id))
             if r.status_code == requests.codes.ok:
                 return True
             else:
-                print("Call to %s failed with arg %s" % (func_name, arg))
-                print(r.content)
                 return False
         except requests.exceptions.RequestException:
             return False
-
-    def _subscribe_to_event(self, event, callback):
-        messages = SSEClient(MeatHook.api_sse_url.substitute(dict(event=event, token=self.token_id)))
-        for msg in messages:
-            if msg.data:
-                callback(json.loads(msg.data))

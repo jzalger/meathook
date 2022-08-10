@@ -11,20 +11,14 @@ $(document).ready(function(){
     $("#temp-setpoint").button().click(function(){
         button_function($("#temp-setpoint-input"), "/set-temp-setpoint", "Error updating temperature setpoint");
     });
-    $("#rh-setpoint").button().click(function(){
-        button_function($("#rh-setpoint-input"), "/set-rh-setpoint", "Error updating humidity setpoint");
-    });
     $("#temp-alarm-delta-set").button().click(function(){
         button_function($("#temp-alarm-delta-input"), "/set-temp-alarm-point", "Error updating temperature alarm threshold");
     });
-    $("#rh-alarm-delta-set").button().click(function(){
-        button_function($("#rh-alarm-delta-input"), "/set-rh-alarm-point", "Error updating humidity alarm threshold");
+    $("#rh-alarm-limit-set").button().click(function(){
+        button_function($("#rh-alarm-limit-input"), "/set-rh-alarm-limit", "Error updating humidity alarm threshold");
     });
     $("input[name='auto-temp']").on("change", function(){
         button_function($("input[name='auto-temp']:checked"), "/set-temp-ctl", "Error updating temperature control");
-    });
-    $("input[name='auto-rh']").on("change", function(){
-        button_function($("input[name='auto-rh']:checked"), "/set-rh-ctl", "Error updating humidity control");
     });
     $("input[name='fan-state']").on("change", function(){
         button_function($("input[name='fan-state']:checked"), "/set-fan-state", "Error updating fan state");
@@ -35,17 +29,26 @@ $(document).ready(function(){
     $("input[name='ctl-alg']").on("change", function(){
         button_function($("input[name='ctl-alg']:checked"), "/set-ctl-alg", "Error updating control algorithm");
     });
+    $("input[name='es-state']").on("change", function(){
+        button_function($("input[name='es-state']:checked"), "/set-es-state", "Error updating energy saving state");
+    });
+    $("#overnight-temp-btn").button().click(function(){
+        button_function($("#overnight-temp-input"), "/set-es-temp-setpoint", "Error updating energy saving setpoint");
+    });
+    $("#overnight-time-btn").button().click(function(){
+        button_function({"es_start_string":$("overnight-time1-input").val(), "es_Stop_string":$("overnight-time2-input").val()}, "/set-es-timing", "Error updating es-timing");
+    });
     init_state();
+    setInterval(init_state, 10000);
 });
 
 function set_status_bar(elem, current_val, max_val) {
-    var percent = current_val / max_val * 100;
+    let percent = current_val / max_val * 100;
     $(elem).css("width", percent + "%");
 }
-
 function button_function(elem, url, error_msg){
-    var new_val = $(elem).val();
-    var args = {new_state: new_val};
+    let new_val = $(elem).val();
+    let args = {new_state: new_val};
     $.get( url, args )
     .done(function(result) {
         if (result === false) {
@@ -53,28 +56,37 @@ function button_function(elem, url, error_msg){
             $("#general-error-banner").show();
         }
     })
-};
+}
+
+/* function set_es_time(times_dict, url, error_msg) {
+    let new_values = times_dict;
+    let args = {new_state: new_values};
+    $.get( url, args )
+    .done(function(result) {
+        if (result === false) {
+            $("#general-error-banner").text(error_msg);
+            $("#general-error-banner").show();
+        }
+    })
+} */
 
 function init_state(){
     $.get("/get-device-state").done(function(new_state) {
         // Alerts
-        if (new_state.temp_alarm === "1") {
+        if (new_state.temp_alarm === true) {
             $("#temp-alert-banner").show();
         }
-        if (new_state.rh_alarm === "1") {
+        if (new_state.rh_alarm === true) {
             $("#rh-alert-banner").show();
         }
-        if (new_state.door_state === "1") {
+        if (new_state.door_state === true) {
             $("#door-alert-banner").show();
         }
         // Current State
-        if (new_state.fridge_state === "1"){
+        if (new_state.fridge_state === true){
             $("#cooling-badge").toggle();
         }
-        if (new_state.humidifier_state === "1"){
-            $("#rh-badge").toggle();
-        }
-        if (new_state.fan_state === "1"){
+        if (new_state.fan_state === true){
             $("#fan-badge").toggle();
         }
 
@@ -87,7 +99,7 @@ function init_state(){
         $("#external-temp").text(parseFloat(new_state.external_temp).toFixed(1) + " ˚C");
         set_status_bar($("#external-temp"), parseFloat(new_state.external_temp), 45.0);
 
-        if (new_state.temp_control === "1"){
+        if (new_state.temp_control === true){
             $("#temp-ctl-on").addClass("active");
             $("#temp-ctl-off").removeClass("active");
             $("#temp-ctl-on-input").prop("checked", true);
@@ -96,16 +108,7 @@ function init_state(){
             $("#temp-ctl-on").removeClass("active");
             $("#temp-ctl-off-input").prop("checked", true);
         }
-        if (new_state.rh_control === "1"){
-            $("#rh-ctl-on").addClass("active");
-            $("#rh-ctl-off").removeClass("active");
-            $("#rh-ctl-on-input").prop("checked", true);
-        } else {
-            $("#rh-ctl-off").addClass("active");
-            $("#rh-ctl-on").removeClass("active");
-            $("#rh-ctl-off-input").prop("checked", true);
-        }
-        if (new_state.fan_state === "1"){
+        if (new_state.fan_state === true){
             $("#fan-ctl-on").addClass("active");
             $("#fan-ctl-off").removeClass("active");
             $("#fan-ctl-on-input").prop("checked", true);
@@ -115,8 +118,20 @@ function init_state(){
             $("#fan-ctl-off-input").prop("checked", true);
         }
 
-        $("#temp-setpoint-input").attr("placeholder", parseFloat(new_state.fridge_temp_setpoint).toFixed(1));
-        $("#rh-setpoint-input").attr("placeholder", parseFloat(new_state.fridge_rh_setpoint).toFixed(0));
+        $("#temp-setpoint-input").attr("placeholder", parseFloat(new_state.temp_setpoint).toFixed(1));
+
+        if (new_state.es_state === true){
+            $("#energy-saving-on").addClass("active");
+            $("#energy-saving-off").removeClass("active");
+            $("##energy-saving-on-input").prop("checked", true);
+        } else {
+            $("#energy-saving-off").addClass("active");
+            $("#energy-saving-on").removeClass("active");
+            $("#energy-saving-off-input").prop("checked", true);
+        }
+        $("#overnight-temp-input").attr("placeholder", parseFloat(new_state.es_temp_setpoint).toFixed(1));
+        $("#overnight-time1-input").attr("placeholder", new_state.es_start);
+        $("#overnight-time2-input").attr("placeholder", new_state.es_stop);
 
         if (new_state.control_algorithm === "basic"){
             $("#control-alg-basic").addClass("active");
@@ -138,7 +153,7 @@ function init_state(){
             $("#control-alg-basic").removeClass("active");
             $("#control-alg-learn").removeClass("active");
         }
-        if (new_state.fridge_state === "1"){
+        if (new_state.fridge_state === true){
             $("#manual-fridge-ctl-on").addClass("active");
             $("#manual-fridge-ctl-on-input").prop("checked", true);
             $("#manual-fridge-ctl-off").removeClass("active");
@@ -148,6 +163,10 @@ function init_state(){
             $("#manual-fridge-ctl-on").removeClass("active");
         }
         $("#temp-alarm-delta-input").attr("placeholder", parseFloat(new_state.temp_alarm_delta).toFixed(1));
-        $("#rh-alarm-delta-input").attr("placeholder", parseFloat(new_state.rh_alarm_delta).toFixed(0));
+        $("#rh-alarm-limit-input").attr("placeholder", parseFloat(new_state.rh_alarm_limit).toFixed(0));
+
+        if (Object.entries(new_state).length > 0){
+            $("#disconnected-badge").hide();
+        }
     })
 }

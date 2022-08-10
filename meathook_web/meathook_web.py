@@ -1,9 +1,13 @@
+import os
+import importlib.util
 from flask import Flask, render_template, request, jsonify
 from meathook import MeatHook
-from secrets import device_id, particle_token, web_host
+spec = importlib.util.spec_from_file_location("mhconfig", os.getenv("MHCONFIG_FILE"))
+mhconfig = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mhconfig)
 
 meathook = Flask(__name__)
-device = MeatHook(device_id, particle_token)
+device = MeatHook(mhconfig.device_id, mhconfig.particle_token, api_config=mhconfig.api_config)
 
 
 @meathook.route('/')
@@ -22,16 +26,16 @@ def get_var_state():
     return jsonify(device.state(var))
 
 
+@meathook.route("/set-led-state", methods=["GET"])
+def set_led_state():
+    new_state = request.args.get("new_state")
+    return jsonify(device.set_led_state(new_state))
+
+
 @meathook.route('/set-temp-ctl', methods=["GET"])
 def set_temp_control():
     new_state = request.args.get("new_state")
     return jsonify(device.set_temp_control(new_state))
-
-
-@meathook.route('/set-rh-ctl', methods=["GET"])
-def set_rh_control():
-    new_state = request.args.get("new_state")
-    return jsonify(device.set_rh_control(new_state))
 
 
 @meathook.route("/set-fan-state", methods=["GET"])
@@ -44,12 +48,6 @@ def set_fan_state():
 def set_temp_setpoint():
     new_state = request.args.get("new_state")
     return jsonify(device.set_temp_setpoint(new_state))
-
-
-@meathook.route("/set-humidity-setpoint", methods=["GET"])
-def set_rh_setpoint():
-    new_state = request.args.get("new_state")
-    return jsonify(device.set_rh_setpoint(new_state))
 
 
 @meathook.route("/set-ctl-alg", methods=["GET"])
@@ -67,14 +65,32 @@ def set_fridge_state():
 @meathook.route("/set-temp-alarm-point", methods=["GET"])
 def set_temp_alarm_threashold():
     new_state = request.args.get("new_state")
-    return jsonify(device.set_temp_alarm_setpoint(new_state))
+    return jsonify(device.set_temp_alarm_delta(new_state))
 
 
-@meathook.route("/set-rh-alarm-point", methods=["GET"])
-def set_rh_alarm_threashold():
+@meathook.route("/set-rh-alarm-limit", methods=["GET"])
+def set_rh_alarm_limit():
     new_state = request.args.get("new_state")
-    return jsonify(device.set_rh_alarm_setpoint(new_state))
+    return jsonify(device.set_rh_alarm_limit(new_state))
+
+
+@meathook.route("/set-es-state", methods=["GET"])
+def set_es_state():
+    new_state = request.args.get("new_state")
+    return jsonify(device.set_es_state(new_state))
+
+
+@meathook.route("/set-es-temp-setpoint", methods=["GET"])
+def set_es_temp_setpoint():
+    new_state = request.args.get("new_state")
+    return jsonify(device.set_es_temp_setpoint(new_state))
+
+
+@meathook.route("/set-es-timing", methods=["GET"])
+def set_es_timing():
+    new_state = request.args.get("new_state")
+    return jsonify(device.set_es_timing(new_state))
 
 
 if __name__ == '__main__':
-    meathook.run(debug=True, host=web_host)
+    meathook.run(debug=True, host=mhconfig.web_host)
