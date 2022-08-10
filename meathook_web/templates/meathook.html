@@ -133,7 +133,7 @@
 
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card ">
+            <div class="card bg-light">
                 <div class="card-header">
                     Energy Saving
                 </div>
@@ -145,12 +145,36 @@
                             </div>
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label id="energy-saving-on" class="btn btn-outline-success btn-sm">
-                                        <input id="energy-saving-on-input" type="radio" name="fan-state" value="ON" autocomplete="off" >ON
+                                    <label class="btn btn-outline-success btn-sm" id="energy-saving-on">
+                                        <input autocomplete="off" id="energy-saving-on-input" name="fan-state" type="radio" value="ON" >ON
                                     </label>
-                                    <label id="energy-saving-off" class="btn btn-outline-secondary btn-sm">
-                                        <input id="energy-saving-off-input" type="radio" name="fan-state" value="OFF" autocomplete="off">OFF
+                                    <label class="btn btn-outline-secondary btn-sm" id="energy-saving-off">
+                                        <input autocomplete="off" id="energy-saving-off-input" name="fan-state" type="radio" value="OFF">OFF
                                     </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-6">
+                                <em class="fas fa-thermometer-half"></em> Activate between
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group input-group-sm mb-3">
+                                    <input style="max-width:70px" aria-label="hours" class="form-control" id="overnight-time1-input"
+                                           placeholder="22:00"
+                                           type="text">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">and</span>
+                                            <input style="max-width:70px" aria-label="hours" class="form-control" id="overnight-time2-input"
+                                            placeholder="10:00"
+                                            type="text">
+                                        <button class="btn btn-outline-primary btn-sm" id="overnight-time-btn"
+                                                type="button">
+                                            Set
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -162,9 +186,9 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input id="overnight-temp-input" placeholder="Loading" type="text"
-                                           class="form-control"
-                                           aria-label="degrees celcius">
+                                    <input aria-label="degrees celcius" class="form-control" id="overnight-temp-input"
+                                           placeholder="10.0"
+                                           type="text">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
                                         <button class="btn btn-outline-primary btn-sm" id="overnight-temp-btn"
