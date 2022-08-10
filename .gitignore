@@ -133,3 +133,4 @@ mhconfig.py
 notes.txt
 .idea/
 .vscode/
+.env
