@@ -7,6 +7,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
     <link href="{{ url_for('static', filename='meathook.css') }}" rel="stylesheet" type="text/css">
+    <link rel=icon href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15/svgs/solid/utensils.svg>
 
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/04d344c588.js"></script>
     <title>Meat Hook</title>
@@ -39,6 +40,9 @@
                     <span class="badge badge-primary" id="cooling-badge">COOLING</span>
                     <span class="badge badge-secondary" id="fan-badge">FAN ON</span>
                     <span class="badge badge-danger" id="disconnected-badge">DISCONNECTED</span>
+
+                    <button class="btn btn-sm float-right" id="refresh-state-btn"
+                     type="button"><em class="fa fa-rotate-right"></em></button>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
@@ -147,10 +151,10 @@
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     <label class="btn btn-outline-success btn-sm" id="energy-saving-on">
-                                        <input autocomplete="off" id="energy-saving-on-input" name="fan-state" type="radio" value="ON" >ON
+                                        <input autocomplete="off" id="energy-saving-on-input" name="es-state" type="radio" value="ON" >ON
                                     </label>
                                     <label class="btn btn-outline-secondary btn-sm" id="energy-saving-off">
-                                        <input autocomplete="off" id="energy-saving-off-input" name="fan-state" type="radio" value="OFF">OFF
+                                        <input autocomplete="off" id="energy-saving-off-input" name="es-state" type="radio" value="OFF">OFF
                                     </label>
                                 </div>
                             </div>
@@ -166,7 +170,7 @@
                                     <input style="max-width:70px" aria-label="hours" class="form-control" id="overnight-time1-input"
                                            placeholder="22:00"
                                            type="text">
-                                    <div class="input-group-append">
+                                    <div class="input-group-append input-group-sm">
                                         <span class="input-group-text">and</span>
                                             <input style="max-width:70px" aria-label="hours" class="form-control" id="overnight-time2-input"
                                             placeholder="10:00"

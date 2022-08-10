@@ -64,7 +64,6 @@ class MeatHook(object):
             return None
 
     def get_state(self):
-        print("Querying the device state")
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as thread_pool:
             completed = thread_pool.map(self._get_variable, self.state_variables)
         new_state = {k: v for (k, v) in zip(MeatHook.state_variables, completed)}
@@ -116,9 +115,9 @@ class MeatHook(object):
         return success
 
     def set_rh_alarm_limit(self, new_state):
-        success = self._call_func("set_rh_alarm_delta", new_state)
+        success = self._call_func("set_rh_alarm_limit", new_state)
         if success:
-            self.state['rh_alarm_delta'] = new_state
+            self.state['rh_alarm_limit'] = new_state
         return success
 
     def set_control_alg(self, new_alg):
@@ -145,7 +144,7 @@ class MeatHook(object):
     def set_es_timing(self, new_state):
         # new state must contain both es_start_string and es_end_string as a dict.
         start_success = self._call_func("es_start", new_state['es_start_string'])
-        end_success = self._call_func("es_stop", new_state['es_end_string'])
+        end_success = self._call_func("es_stop", new_state['es_stop_string'])
         if start_success and end_success:
             self.state['es_start_string'] = new_state['es_start_string']
             self.state['es_stop_string'] = new_state['es_stop_string']

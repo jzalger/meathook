@@ -1,15 +1,12 @@
 """
 Unit Tests for meathook.py
 """
-import tempfile
-import meathook
-from unittest import TestCase, skip, mock
+import meathook_web.meathook
 
-
-class TestMeathook(TestCase):
+class TestMeathook:
 
     def test_init(self):
-        self.assertEqual(, )
+        pass
 
     def test_start_stream(self):
         pass
