@@ -3,12 +3,12 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='meathook.css') }}">
+    <link href="{{ url_for('static', filename='meathook.css') }}" rel="stylesheet" type="text/css">
 
-    <script src="https://kit.fontawesome.com/04d344c588.js" crossorigin="anonymous"></script>
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/04d344c588.js"></script>
     <title>Meat Hook</title>
 </head>
 
@@ -32,36 +32,37 @@
     </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card ">
+            <div class="card">
                 <div class="card-header">
                     Current Status
 
-                    <span id="cooling-badge" class="badge badge-primary">COOLING</span>
-                    <span id="fan-badge" class="badge badge-secondary">FAN ON</span>
+                    <span class="badge badge-primary" id="cooling-badge">COOLING</span>
+                    <span class="badge badge-secondary" id="fan-badge">FAN ON</span>
+                    <span class="badge badge-danger" id="disconnected-badge">DISCONNECTED</span>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <em class="fas fa-thermometer-half"></em> Fridge Temperature
                         <div class="progress progress-large">
-                            <div id="fridge-temp" class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 25%" aria-valuenow="8"
-                                 aria-valuemin="0" aria-valuemax="20"> ˚C
+                            <div aria-valuemax="20" aria-valuemin="0" aria-valuenow="8" class="progress-bar progress-bar-striped bg-primary" id="fridge-temp"
+                                 role="progressbar" style="width: 25%"> ˚C
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <em class="fas fa-tint"></em> Fridge Humidity
                         <div class="progress progress-large">
-                            <div id="fridge-rh" class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 48%"
-                                 aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"> %
+                            <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="48" class="progress-bar progress-bar-striped bg-success"
+                                 id="fridge-rh" role="progressbar" style="width: 48%"> %
                             </div>
                         </div>
                     </li>
                     <li class="list-group-item">
                         <em class="fas fa-thermometer-half"></em> External Temperature
                         <div class="progress progress-large">
-                            <div id="external-temp" class="progress-bar progress-bar-striped bg-warning" role="progressbar" style="width: 75%"
-                                 aria-valuenow="30"
-                                 aria-valuemin="0" aria-valuemax="40"> ˚C
+                            <div aria-valuemax="40" aria-valuemin="0" aria-valuenow="30" class="progress-bar progress-bar-striped bg-warning"
+                                 id="external-temp"
+                                 role="progressbar" style="width: 75%"> ˚C
                             </div>
                         </div>
                     </li>
@@ -71,7 +72,7 @@
     </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card ">
+            <div class="card">
                 <div class="card-header">
                     Controls
                 </div>
@@ -83,11 +84,11 @@
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label id="temp-ctl-on" class="btn btn-outline-success btn-sm ">
-                                        <input id="temp-ctl-on-input" type="radio" name="auto-temp" value="ON" autocomplete="off">ON
+                                    <label class="btn btn-outline-success btn-sm " id="temp-ctl-on">
+                                        <input autocomplete="off" id="temp-ctl-on-input" name="auto-temp" type="radio" value="ON">ON
                                     </label>
-                                    <label id="temp-ctl-off" class="btn btn-outline-secondary btn-sm">
-                                        <input id="temp-ctl-off-input" type="radio" name="auto-temp" value="OFF" autocomplete="off">OFF
+                                    <label class="btn btn-outline-secondary btn-sm" id="temp-ctl-off">
+                                        <input autocomplete="off" id="temp-ctl-off-input" name="auto-temp" type="radio" value="OFF">OFF
                                     </label>
                                 </div>
                             </div>
@@ -100,11 +101,11 @@
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label id="fan-ctl-on" class="btn btn-outline-success btn-sm">
-                                        <input id="fan-ctl-on-input" type="radio" name="fan-state" value="ON" autocomplete="off" >ON
+                                    <label class="btn btn-outline-success btn-sm" id="fan-ctl-on">
+                                        <input autocomplete="off" id="fan-ctl-on-input" name="fan-state" type="radio" value="ON" >ON
                                     </label>
-                                    <label id="fan-ctl-off" class="btn btn-outline-secondary btn-sm">
-                                        <input id="fan-ctl-off-input" type="radio" name="fan-state" value="OFF" autocomplete="off">OFF
+                                    <label class="btn btn-outline-secondary btn-sm" id="fan-ctl-off">
+                                        <input autocomplete="off" id="fan-ctl-off-input" name="fan-state" type="radio" value="OFF">OFF
                                     </label>
                                 </div>
                             </div>
@@ -117,7 +118,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input placeholder="Loading" id="temp-setpoint-input" type="text" class="form-control" aria-label="degrees celcius">
+                                    <input aria-label="degrees celcius" class="form-control" id="temp-setpoint-input" placeholder="Loading" type="text">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
                                         <button class="btn btn-outline-primary btn-sm" id="temp-setpoint" type="button">Set</button>
@@ -133,7 +134,7 @@
 
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card bg-light">
+            <div class="card">
                 <div class="card-header">
                     Energy Saving
                 </div>
@@ -206,7 +207,7 @@
     </div>
     <div class="row main-row justify-content-center">
         <div class="col-sm-12 col-lg-8">
-            <div class="card ">
+            <div class="card">
                 <div class="card-header">
                     More Controls
                 </div>
@@ -218,14 +219,14 @@
                             </div>
                             <div class="col">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label id="control-alg-basic" class="btn btn-outline-secondary btn-sm">
-                                        <input id="control-alg-basic-input" value="basic" type="radio" name="ctl-alg" autocomplete="off" > Basic
+                                    <label class="btn btn-outline-secondary btn-sm" id="control-alg-basic">
+                                        <input autocomplete="off" id="control-alg-basic-input" name="ctl-alg" type="radio" value="basic" > Basic
                                     </label>
-                                    <label id="control-alg-pid" class="btn btn-outline-secondary btn-sm">
-                                        <input id="control-alg-pid-input" value="pid" type="radio" name="ctl-alg" autocomplete="off"> PID
+                                    <label class="btn btn-outline-secondary btn-sm" id="control-alg-pid">
+                                        <input autocomplete="off" class="disabled" id="control-alg-pid-input" name="ctl-alg" type="radio" value="pid"> PID
                                     </label>
-                                    <label id="control-alg-learn" class="btn btn-outline-secondary btn-sm">
-                                        <input id="control-alg-learn-input" value="learn" type="radio" name="ctl-alg" autocomplete="off"> Learning
+                                    <label class="btn btn-outline-secondary btn-sm" id="control-alg-learn">
+                                        <input autocomplete="off" class="disabled" id="control-alg-learn-input" name="ctl-alg" type="radio" value="learn"> Learning
                                     </label>
                                 </div>
                             </div>
@@ -238,11 +239,11 @@
                             </div>
                             <div class="col-4">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label id="manual-fridge-ctl-on" class="btn btn-outline-success btn-sm ">
-                                        <input id="manual-fridge-ctl-on-input" value="ON" type="radio" name="fridge-state" autocomplete="off"> ON
+                                    <label class="btn btn-outline-success btn-sm " id="manual-fridge-ctl-on">
+                                        <input autocomplete="off" id="manual-fridge-ctl-on-input" name="fridge-state" type="radio" value="ON"> ON
                                     </label>
-                                    <label id="manual-fridge-ctl-off" class="btn btn-outline-secondary btn-sm">
-                                        <input id="manual-fridge-ctl-off-input" value="OFF" type="radio" name="fridge-state" autocomplete="off"> OFF
+                                    <label class="btn btn-outline-secondary btn-sm" id="manual-fridge-ctl-off">
+                                        <input autocomplete="off" id="manual-fridge-ctl-off-input" name="fridge-state" type="radio" value="OFF"> OFF
                                     </label>
                                 </div>
                             </div>
@@ -255,7 +256,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input id="temp-alarm-delta-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
+                                    <input aria-label="degrees celcius" class="form-control" id="temp-alarm-delta-input" placeholder="Loading" type="text">
                                     <div class="input-group-append">
                                         <span class="input-group-text">˚C</span>
                                         <button class="btn btn-outline-primary btn-sm" id="temp-alarm-delta-set" type="button">Set</button>
@@ -271,7 +272,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="input-group input-group-sm mb-3">
-                                    <input id="rh-alarm-limit-input" placeholder="Loading" type="text" class="form-control" aria-label="degrees celcius">
+                                    <input aria-label="degrees celcius" class="form-control" id="rh-alarm-limit-input" placeholder="Loading" type="text">
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
                                         <button class="btn btn-outline-primary btn-sm" id="rh-alarm-limit-set" type="button">Set</button>
@@ -288,14 +289,14 @@
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+<script crossorigin="anonymous"
+        src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script crossorigin="anonymous"
         integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="{{ url_for('static', filename='meathook.js') }}"></script>
 </body>
 </html>
