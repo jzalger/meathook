@@ -15,6 +15,9 @@ sseclient = "*"
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
+flake8 = "*"
+codecov = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.9"
