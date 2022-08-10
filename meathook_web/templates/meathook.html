@@ -7,6 +7,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
     <link href="{{ url_for('static', filename='meathook.css') }}" rel="stylesheet" type="text/css">
+    <link rel=icon href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15/svgs/solid/utensils.svg>
 
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/04d344c588.js"></script>
     <title>Meat Hook</title>
@@ -39,6 +40,9 @@
                     <span class="badge badge-primary" id="cooling-badge">COOLING</span>
                     <span class="badge badge-secondary" id="fan-badge">FAN ON</span>
                     <span class="badge badge-danger" id="disconnected-badge">DISCONNECTED</span>
+
+                    <button class="btn btn-sm float-right" id="refresh-state-btn"
+                     type="button"><em class="fa fa-rotate-right"></em></button>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">

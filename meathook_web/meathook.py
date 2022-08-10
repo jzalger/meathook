@@ -64,7 +64,6 @@ class MeatHook(object):
             return None
 
     def get_state(self):
-        print("Querying the device state")
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as thread_pool:
             completed = thread_pool.map(self._get_variable, self.state_variables)
         new_state = {k: v for (k, v) in zip(MeatHook.state_variables, completed)}

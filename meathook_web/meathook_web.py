@@ -21,6 +21,13 @@ def get_device_state():
     return jsonify(device.state)
 
 
+@meathook.route('/refresh-device-state')
+def refresh_device_state():
+    """Forces a full re-query of the device"""
+    device.get_state()
+    return jsonify(device.state)
+
+
 @meathook.route("/get-var-state", methods=["GET"])
 def get_var_state():
     var = request.args.get("var")
