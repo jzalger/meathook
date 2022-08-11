@@ -16,4 +16,5 @@ api_config = dict(get_url=api_get_url,
 device_id = ""  # ID of particle device
 particle_token = ""
 web_host = "0.0.0.0"
+syslog_host = "0.0.0.0:514"
 testing = False
