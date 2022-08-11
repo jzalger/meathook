@@ -2,13 +2,17 @@ import os
 import simplejson as json
 import importlib.util
 from flask import Flask, render_template, request, jsonify
-from meathook import MeatHook
+from meathook_web.meathook import MeatHook
 spec = importlib.util.spec_from_file_location("mhconfig", os.getenv("MHCONFIG_FILE"))
 mhconfig = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mhconfig)
 
 meathook = Flask(__name__)
+
 device = MeatHook(mhconfig.device_id, mhconfig.particle_token, api_config=mhconfig.api_config)
+if mhconfig.testing is False:
+    device.init_state()
+    device.start_stream()
 
 
 @meathook.route('/')
@@ -101,4 +105,4 @@ def set_es_timing():
 
 
 if __name__ == '__main__':
-    meathook.run(debug=True, host=mhconfig.web_host)
+    meathook.run(debug=mhconfig.testing, host=mhconfig.web_host)

@@ -1,68 +1,44 @@
 """
 Unit Tests for meathook.py
 """
-import meathook_web.meathook
+from mhconfig_template import api_config
+import threading
 
-class TestMeathook:
 
-    def test_init(self):
-        pass
+def test_basic_init(device):
+    assert device.device_id == "1234" 
+    assert device.token_id == "1234"
+    assert device.api_config == api_config
+    assert isinstance(device.sse_stream_thread, threading.Thread)
+    assert isinstance(device.state, dict)
 
-    def test_start_stream(self):
-        pass
+def test_start_stream(device):
+    device.start_stream()
+    assert device.sse_stream_thread.is_alive() is True
 
-    def test_stop_stream(self):
-        pass
-
-    def test__start_stream(self):
-        pass
-        
-    def test_handle_state_update(self):
-        pass
-        
-    def test__get_variable(self):
-        pass
-        
-    def test_get_state(self):
-        pass
+def test_stop_stream(device):
+    device.sse_stream_thread.start()
+    device.stop_stream()
+    assert device.sse_stream_thread.is_alive() is False
     
-    def test_is_online(self):
-        pass
-        
-    def test_set_led_state(self):
-        pass
-        
-    def test_set_temp_setpoint(self):
-        pass
-        
-    def test_set_fan_state(self):
-        pass
-        
-    def test_set_fridge_state(self):
-        pass
-        
-    def test_set_temp_control(self):
-        pass
-        
-    def test_set_temp_alarm_delta(self):
-        pass
-        
-    def test_set_rh_alarm_limit(self):
-        pass
-        
-    def test_set_control_alg(self):
-        pass
-        
-    def test_set_es_state(self):
-        pass
-        
-    def test_set_es_temp_setpoint(self):
-        pass
-        
-    def test_set_es_timing(self):
-        pass
-        
-    def test__call_func(self):
-        pass
-        
-        
+def test_handle_state_update(device, event):
+    device._handle_state_update(event)
+    assert isinstance(device.state, dict)
+    assert device.state['fridge_temp'] == '25.159996'
+    assert device.state['fridge_rh'] == '56.595303'
+    assert device.state['external_temp'] == '30.952381'
+    assert device.state['fridge_state'] is False
+    assert device.state['fan_state'] is False
+    assert device.state['door_state'] is False
+    assert device.state['temp_setpoint'] ==  '5.500000'
+    assert device.state['temp_alarm'] is False
+    assert device.state['rh_alarm'] is False
+    assert device.state['control_algorithm'] == 'basic'
+    assert device.state['temp_alarm_delta'] == '25.000000'
+    assert device.state['rh_alarm_limit'] == '80.000000'
+    assert device.state['temp_control'] is False
+    assert device.state['es_state'] is False
+    assert device.state['es_temp_setpoint'] == '10.000000'
+    assert device.state['es_start'] == "20:00"
+    assert device.state['es_stop'] == "11:00"
+    assert device.state['current_temp_setpoint'] == "5.500000"

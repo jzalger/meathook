@@ -18,18 +18,16 @@ class MeatHook(object):
                        "rh_alarm_limit", "temp_control", "es_state", "es_temp_setpoint", "es_start", "es_stop",
                        "current_temp_setpoint"]
 
-    def __init__(self, device_id, token_id, api_config, init_state=False):
+    def __init__(self, device_id, token_id, api_config):
         self.device_id = device_id
         self.token_id = token_id
         self.api_config = api_config
         self.state = dict()
-
-        # Initialize the device state, then subscribe to the feed.
-        if self.is_online and init_state:
-            self.get_state()
-
         self.sse_stream_thread = threading.Thread(target=self._start_stream)
-        self.start_stream()
+
+    def init_state(self):
+        if self.is_online:
+            self.get_state()
 
     def start_stream(self):
         self.sse_stream_thread.start()

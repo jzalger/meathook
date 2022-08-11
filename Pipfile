@@ -11,10 +11,12 @@ pyyaml = "*"
 gunicorn = "*"
 simplejson = "*"
 sseclient = "*"
+pytest-flask = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
+pytest-flask = "*"
 flake8 = "*"
 codecov = "*"
 coverage = "*"

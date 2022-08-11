@@ -2,63 +2,59 @@ name: CI
 
 on:
   push:
-    branches: [ "master", "dev" ]
+    branches: ["master", "dev"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 permissions:
-  pull-requests: read 
+  pull-requests: read
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    
-    - name: Build the Docker image
-      uses: docker/build-push-action@v3.1.0
-      with:
-        context: .
-        push: false
-        tags: jzalger/meathook:latest
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build the Docker image
+        uses: docker/build-push-action@v3.1.0
+        with:
+          context: .
+          push: false
+          tags: jzalger/meathook:latest
 
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pipenv
-        pipenv install --dev
-    - name: Lint with flake8
-      run:
-        pipenv run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        pipenv run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run:
+          python -m pip install --upgrade pip;
+          pip install pipenv;
+          pipenv install --dev;
+      - name: Lint with flake8
+        run:
+          pipenv run flake8 --count --select=E9,F63,F7,F82 --show-source --statistics
 
-    - name: Test with pytest and coverage
-      run:
-        pipenv run pytest --cov=meathook --cov-report xml tests/unit/test_meathook.py
+      - name: Test with pytest and coverage
+        run: pipenv run pytest --cov=meathook_web --cov-report xml tests/
 
-    - name: Codecov
-      uses: codecov/codecov-action@v1.0.10
+      - name: Codecov
+        uses: codecov/codecov-action@v1.0.10
 
   Analysis:
     runs-on: ubuntu-latest
     steps:
-      - name: Analyze with SonarCloud         
+      - name: Analyze with SonarCloud
 
         uses: SonarSource/sonarcloud-github-action@de2e56b42aa84d0b1c5b622644ac17e505c9a049
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          args:             
-            -Dsonar.projectKey=jzalger_meathook
+          args: -Dsonar.projectKey=jzalger_meathook
             -Dsonar.organization=jzalger
