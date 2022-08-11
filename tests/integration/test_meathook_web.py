@@ -1,9 +1,6 @@
 """
 Unit Tests for meathook_web.py
 """
-import pytest
-from mhconfig_template import api_config
-
 
 def test_main(test_client):
     response = test_client.get("/")
