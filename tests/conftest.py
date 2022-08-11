@@ -6,7 +6,7 @@ from mhconfig_template import api_config
 
 @pytest.fixture(scope="module")
 def test_client():
-    app = meathook_web.meathook
+    app = meathook_web.meathook_app
     with app.test_client() as testing_client:
         with app.app_context():
             yield testing_client
