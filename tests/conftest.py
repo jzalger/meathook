@@ -1,5 +1,4 @@
 import pytest
-import json
 import sseclient
 from meathook_web.meathook import MeatHook
 from meathook_web import meathook_web

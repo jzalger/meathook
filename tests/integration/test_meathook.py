@@ -1,10 +1,6 @@
 """
 Integration tests for meathook.py (Device object)
 """
-import pytest
-from mhconfig_template import api_config
-import meathook_web.meathook as meathook
-
 
 def test__start_stream():
     pass

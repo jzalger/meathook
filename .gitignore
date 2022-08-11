@@ -133,4 +133,6 @@ mhconfig.py
 notes.txt
 .idea/
 .vscode/
-.env
+.flake8
+.markdownlint.yaml
+.trunk

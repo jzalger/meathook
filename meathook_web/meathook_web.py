@@ -2,7 +2,6 @@ import os
 import simplejson as json
 import importlib.util
 from flask import Flask, render_template, request, jsonify
-from meathook_web import meathook
 from meathook_web.meathook import MeatHook
 spec = importlib.util.spec_from_file_location("mhconfig", os.getenv("MHCONFIG_FILE"))
 mhconfig = importlib.util.module_from_spec(spec)
