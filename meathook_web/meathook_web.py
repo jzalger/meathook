@@ -8,13 +8,13 @@ spec = importlib.util.spec_from_file_location("mhconfig", os.getenv("MHCONFIG_FI
 mhconfig = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mhconfig)
 
-mhlog = logging.getLogger('particle-hub')
+mhlog = logging.getLogger('meathook_web')
 mhlog.setLevel(logging.INFO)
 log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 syslog_handler = logging.handlers.SysLogHandler(address=mhconfig.syslog_host)
 syslog_handler.setFormatter(log_formatter)
 mhlog.addHandler(syslog_handler)
-meathook.phlog = mhlog
+meathook.mhlog = mhlog
 
 meathook_app = Flask(__name__)
 
@@ -114,4 +114,5 @@ def set_es_timing():
 
 
 if __name__ == '__main__':
+    mhlog.info("Launching MeatHook Web App")
     meathook_app.run(debug=mhconfig.testing, host=mhconfig.web_host)
