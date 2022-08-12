@@ -13,11 +13,14 @@ def test_get_device_state(test_client):
     assert response.status_code == 200
     assert b'{}\n' in response.data
 
+
 def test_get_var_state():
     pass
     
-def test_set_led_state():
-    pass
+def test_set_led_state(test_client):
+    response = test_client.get("/set-led-state")
+    assert response.status_code == 200
+    assert '0' in response.data
     
 def test_set_temp_control():
     pass
